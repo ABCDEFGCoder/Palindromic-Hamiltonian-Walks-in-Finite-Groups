@@ -1,0 +1,1003 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,longtable,array}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\F}{\mathbb F}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Pp}{\mathsf P}
+\newcommand{\Tt}{\mathsf T}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\SL}{\mathrm{SL}}
+\newcommand{\PGL}{\mathrm{PGL}}
+\newcommand{\PSL}{\mathrm{PSL}}
+\newcommand{\Sp}{\mathrm{Sp}}
+\newcommand{\SU}{\mathrm{SU}}
+\newcommand{\PSU}{\mathrm{PSU}}
+\newcommand{\U}{\mathrm U}
+\newcommand{\Ogrp}{\mathrm O}
+\newcommand{\PG}{\mathrm{PG}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\Sz}{\mathrm{Sz}}
+\title{\textbf{Palindromic Hamiltonian Walks in Finite Groups}}
+\author{Zixuan Ye \and GPT-6.1 Sol \and GPT-6 Sol}
+\date{October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+We prove that every finite group admits a palindromic sequence of steps whose partial products, including the empty product, enumerate the group exactly once. Endpoint correction makes such walks compatible with subgroup chains, while even-degree arc-transitive actions turn Hamilton paths into palindromic coset transversals. Geometric Euler tours, opposition graphs, and representation-theoretic spectral bounds cover the finite simple groups. In dimension three, a unitary Singer quotient requires additional control of voltage differences: removing low-order differences and preserving a short path of generating differences supplies that control. The proof uses the classification of finite simple groups and one explicitly specified finite computation.
+\end{abstract}
+
+\section{Introduction}
+Let $G$ be a finite group of order $n$. A word $W=(g_1,\ldots,g_{n-1})$ is a \emph{Hamiltonian walk} if its partial products $p_0=1$ and $p_i=g_1\cdots g_i$ enumerate $G$. It is \emph{palindromic} if $g_i=g_{n-i}$ for every $1\le i<n$. The available steps are all elements of $G$; the restriction concerns the order and mirror symmetry of the steps. Kagey asked whether every finite group has such a walk, first in an online question \cite{KageyMSE} and subsequently as Problem~125 \cite{Kagey125}. His question records positive examples for dihedral groups and the quaternion group. We prove the following general result.
+\begin{theorem}\label{thm:main}
+Every finite group has a palindromic Hamiltonian walk.
+\end{theorem}
+The empty product is essential to the definition: a word of length $n-1$ supplies $n$ partial products only after $p_0$ is included. The trivial group is allowed, with the empty word.
+
+There are two distinct sources of difficulty. Multiplication is noncommutative, so reversing an initial product cannot in general be replaced by taking its inverse. Moreover, point actions of groups of even order can have odd degree. A construction that removes vertices simultaneously from two ends of a Hamilton path works in even degree; in odd degree its final step would impose an uncontrolled square-root condition. We address the first difficulty by an endpoint correction in a subgroup construction and the second by changing the action when necessary.
+
+Here are the two general group-theoretic mechanisms. Write $\Pp(G)$ for the conclusion of Theorem~\ref{thm:main}. For $H\le G$, write $\Tt(G,H)$ if a palindromic word of length $[G:H]-1$ has partial products representing all left cosets of $H$.
+\begin{theorem}\label{thm:introinterfaces}
+The following assertions hold.
+\begin{enumerate}
+\item If $H\le K\le G$, then $\Tt(K,H)$ and $\Tt(G,K)$ imply $\Tt(G,H)$.
+\item If $N\lhd G$, then $\Pp(N)$ and $\Pp(G/N)$ imply $\Pp(G)$.
+\item Suppose $G$ acts transitively on an even set $X$ and preserves a simple graph on $X$ on whose arcs it acts transitively. If that graph has a Hamilton path, then $\Tt(G,G_x)$ holds. If also $\Pp(G_x)$ holds, then $\Pp(G)$ holds.
+\end{enumerate}
+\end{theorem}
+The abelian construction also identifies every possible endpoint and gives the exact number of walks per endpoint (Proposition~\ref{prop:abeliancount}). The first assertion above is an exact construction, including its endpoint adjustment. The second reduces the main theorem to finite simple groups. The third permits us to use geometric actions without prescribing the letters of the final palindrome. Together they separate the problem into a Hamiltonian statement about an action and a recursively simpler statement about its stabilizer.
+
+Our treatment of the simple groups is organized by the geometry that supplies an even action. For special linear groups in characteristic two we use a properly transitioning Euler tour on projective points. For symplectic groups we use an extension-field copy of $\SL_2$. Orthogonal groups and higher-dimensional unitary groups admit suitable point graphs. In exceptional groups, opposition between parabolics supplies the graph, and a small even action inside the Levi subgroup changes the parity without destroying the degree estimate. Ordinary complex character-degree bounds of L\"ubeck \cite{Lubeck} are used precisely in this last step. The sporadic groups are handled through published permutation actions and deterministic Hamiltonicity criteria.
+
+The remaining unitary family illustrates why Hamiltonicity in a quotient alone is insufficient. Let $\Gamma_q$ have as vertices the nonisotropic points of a nondegenerate three-dimensional Hermitian space over $\F_{q^2}$, with orthogonality as adjacency.
+\begin{theorem}\label{thm:introunitary}
+If $q=2^f$, $f\ge3$ is odd, then $\Gamma_q$ has a Hamilton cycle. For $q\ge128$ the proof is uniform and does not depend on a sufficiently-large-field constant. The case $q=32$ has the same analytic proof with explicit parameters; $q=8$ is verified by the accompanying exact certificate.
+\end{theorem}
+A cyclic Singer subgroup of order $L=q^2-q+1$ has $q^2$ nonisotropic orbits. Double intersections in the quotient provide two possible voltages per edge. We prove a row-wise bijection between their differences and the nonzero elements of $\Z/L\Z$ up to sign. This makes filtering by the \emph{order} of the difference compatible with a sharp operator-norm estimate. A short path whose differences generate the cyclic group can then be preserved in a Hamilton cycle. Kneser's addition theorem \cite{Kneser} proves that all total voltages, including a generating voltage, are attainable.
+
+\paragraph{External inputs and computation.}
+The classification of finite simple groups \cite{GLS} is used only to assemble the family theorems into Theorem~\ref{thm:main}. Standard structure results for classical groups, Bruhat decompositions, Levi subgroups, and root representatives are stated at their points of use with references \cite{Taylor,CarterSimple,CarterFinite}. The graph-theoretic inputs are the Chv\'atal--Erd\H{o}s, Jackson, Watkins, and Broersma--van den Heuvel--Jackson--Veldman theorems \cite{CE,Jackson,Watkins,BHVJ}. The independence estimate below is the Hoffman ratio bound (see \cite{BrouwerHaemers}); we give the elementary spectral arguments and the locally colored Euler-tour statement we use; the latter is a form of Kotzig's theorem \cite{Kotzig}. Published sporadic permutation data are explicit external inputs, not outputs of our certificate. The sole computational proof is a fixed finite-field witness for $\Gamma_8$, described in Section~\ref{sec:certificate}, with executable file \texttt{Palindromic\_Walks\_PSU3\_8\_Certificate.py}. No unpublished research-node report is needed to read the proof.
+
+\section{Palindromic coset transversals}\label{sec:cosets}
+Products and group actions are written so that $(ab)x=a(bx)$. For a word $A$, let $\pi(A)$ denote its product, and $A^R$ its reversal, without inverting letters. A word $A=(a_1,\ldots,a_{r-1})$ witnesses $\Tt(G,H)$ if $A=A^R$ and the cosets $H,a_1H,\ldots,a_1\cdots a_{r-1}H$ are precisely $G/H$, where $r=[G:H]$.
+\begin{lemma}[Endpoint-corrected composition]\label{lem:splice}
+Let $H\le K\le G$. Suppose $A$ witnesses $\Tt(K,H)$ and $B=(b_1,\ldots,b_{s-1})$ witnesses $\Tt(G,K)$. Put $t=\pi(A)$. Then
+\[
+A,(t^{-1}b_1),A,(t^{-1}b_2),\ldots,A,(t^{-1}b_{s-1}),A
+\]
+witnesses $\Tt(G,H)$, with each parenthesized expression a single letter.
+\end{lemma}
+\begin{proof}
+If $r=[K:H]$, the length is $s(r-1)+(s-1)=rs-1$. The displayed word is palindromic because $A$ and $B$ are. Write $x_j=b_1\cdots b_j$, $x_0=1$. Its $j$th copy of $A$ starts at $x_j$: the preceding copy ends at $x_{j-1}t$, and the corrected letter takes it to $x_j$. The partial products in that copy visit exactly the $H$-cosets contained in $x_jK$. These $K$-cosets are distinct and exhaustive.
+\end{proof}
+\begin{lemma}\label{lem:transfer}
+If $N\lhd G$ and $N\le H$, then $\Tt(G,H)$ is equivalent to $\Tt(G/N,H/N)$. If $K,H\le G$ and $G=KH$ as a set, then $\Tt(K,K\cap H)$ implies $\Tt(G,H)$.
+\end{lemma}
+\begin{proof}
+In the first assertion the coset spaces are naturally identical. A quotient word lifts palindromically by choosing the same lift at mirrored positions; a word projects palindromically. For the second assertion, $k(K\cap H)\mapsto kH$ is a bijection, and the same word works.
+\end{proof}
+\begin{corollary}\label{cor:extension}
+If $N\lhd G$, $\Pp(N)$, and $\Pp(G/N)$, then $\Pp(G)$. Consequently the universal statement $\Pp(G)$ is equivalent to its restriction to finite simple groups. Also, if $G=KH$, $K\cap H=1$, and both factors have $\Pp$, then $G$ has $\Pp$.
+\end{corollary}
+\begin{proof}
+Use Lemmas~\ref{lem:splice} and \ref{lem:transfer}; for the universal statement, use a composition series, obtained recursively by taking maximal proper normal subgroups.
+\end{proof}
+This corollary concerns extensions. It does not supply inheritance by arbitrary subgroups or by arbitrary quotients. Whenever a stabilizer is used below, its property $\Pp$ is established through specified normal subgroups and quotients.
+
+\begin{lemma}\label{lem:abelian}
+Every finite abelian group has $\Pp$, and $\Tt(A,H)$ holds for every subgroup of a finite abelian group $A$.
+\end{lemma}
+\begin{proof}
+Write $A$ additively and $|A|=n>1$. For a proposed endpoint $t$, a vertex ordering with $p_0=0$ and $p_{n-1-i}=t-p_i$ yields palindromic differences. If $n$ is odd, choose $t\ne0$. The involution $x\mapsto t-x$ has one fixed point $t/2$; place it in the middle, place $0,t$ at the ends, and order representatives of the remaining two-element orbits arbitrarily in the first half. If $n$ is even, the doubling map is not surjective, since its kernel contains an element of order two. Choose $t\notin2A$; now all orbits of the same involution have size two, and the analogous ordering works. Quotients give the assertion for $H$. The trivial group uses the empty word.
+\end{proof}
+A group is called soluble if its derived series $G^{(i+1)}=[G^{(i)},G^{(i)}]$, starting at $G^{(0)}=G$, reaches the identity. 
+\begin{proposition}\label{prop:solvable}
+If $G$ is finite soluble, then $\Tt(G,H)$ holds for every $H\le G$.
+\end{proposition}
+\begin{proof}
+Induct on $|G|$, the abelian case being Lemma~\ref{lem:abelian}. Otherwise choose a nontrivial proper abelian normal subgroup $N$, for example the last nontrivial term of the derived series. Put $K=NH$. Induction gives $\Tt(N,N\cap H)$ and $\Tt(G/N,K/N)$. Lemma~\ref{lem:transfer} gives $\Tt(K,H)$ and $\Tt(G,K)$, and Lemma~\ref{lem:splice} finishes the induction.
+\end{proof}
+Finite $p$-groups are soluble: the class equation gives a nontrivial center, and induction on the central quotient gives the assertion. Solubility is preserved by extensions, as follows directly from the derived series. 
+\begin{proposition}[Abelian endpoints and exact counts]\label{prop:abeliancount}
+Let $A$ be a finite abelian group of order $n>1$, written additively. If $n$ is odd, precisely the nonzero elements can be endpoints of a palindromic Hamiltonian walk. If $n$ is even, precisely the elements outside $2A=\{2a:a\in A\}$ can be endpoints. For each allowable endpoint the number of walks, counted as letter sequences, is $2^r r!$, where $r=\lfloor n/2\rfloor-1$.
+\end{proposition}
+\begin{proof}
+For endpoint $t$, a palindrome necessarily satisfies $p_{n-1-i}=t-p_i$, and conversely this relation on a vertex ordering makes its consecutive differences palindromic. Thus $x\mapsto t-x$ must act on the ordering as reversal. In odd order it has the unique fixed point $t/2$, which occupies the middle, and the distinct endpoints force $t\ne0$. In even order the position reversal has no fixed point, so $t$ cannot be a double. These necessary conditions are sufficient by Lemma~\ref{lem:abelian}'s construction. After fixing the endpoints, and also the middle point in odd order, there are $r$ remaining two-element orbits. Choose one representative from each, in $2^r$ ways, and order them in $r!$ ways in the first half; the other half is forced. Vertex orderings and step words determine one another.
+\end{proof}
+
+An \emph{arc} of a simple undirected graph is an ordered adjacent pair. A group is arc-transitive if it is transitive on these pairs.
+\begin{lemma}[Two-front construction]\label{lem:twofront}
+Suppose $G$ acts transitively on $X$, $|X|=2m$, and preserves an arc-transitive graph with a Hamilton path. Then $\Tt(G,G_x)$ holds.
+\end{lemma}
+\begin{proof}
+Translate the path to order its vertices as $v_0=x,v_1,\ldots,v_{2m-1}$. Choose $t\in G$ with $tx=v_{2m-1}$ and put $x_0=1$, $y_0=t$. At step $i=1,\ldots,m-1$, suppose $x_{i-1}x=v_{i-1}$ and $y_{i-1}x=v_{2m-i}$. Set
+\[
+\alpha=x_{i-1}^{-1}v_i,\qquad \beta=y_{i-1}^{-1}v_{2m-1-i}.
+\]
+Both $(\alpha,x)$ and $(x,\beta)$ are arcs. Choose $a_i$ taking the latter to the former, so $a_ix=\alpha$ and $a_i\beta=x$. Define $x_i=x_{i-1}a_i$, $y_i=y_{i-1}a_i^{-1}$. The two required vertex images persist. With $k=m-1$ and $c=x_k^{-1}y_k$, take
+\[
+(a_1,\ldots,a_k,c,a_k,\ldots,a_1).
+\]
+Its left prefixes are $x_i$, its middle joins $x_k$ to $y_k$, and its right prefixes read backwards are $y_i$, since $y_i=t(a_i\cdots a_1)^{-1}$. Thus the partial products send $x$ to the listed vertices exactly once. If $m=1$, take the single letter $t$.
+\end{proof}
+This proves Theorem~\ref{thm:introinterfaces}. In particular, an even-degree doubly transitive action supplies $\Tt$ by its complete graph. In a complete multipartite graph with equal part sizes, a Hamilton path is obtained by listing one vertex from each part in turn, then a second vertex from each part, and so on; this observation will also be used.
+
+\section{Graph-theoretic tools}\label{sec:graphs}
+All graphs below are finite and simple unless matrices with diagonal entries are expressly allowed. Write $\alpha$ for independence number and $\kappa$ for vertex connectivity, with $\kappa(K_n)=n-1$ and $\kappa=0$ for disconnected graphs. A Hamilton-connected graph has a Hamilton path between any two distinct vertices.
+We use the following published theorems:
+\begin{enumerate}
+\item Dirac's theorem: minimum degree at least $n/2$ implies a Hamilton cycle when $n\ge3$ \cite{Dirac}.
+\item Chv\'atal--Erd\H{o}s: $\kappa\ge\alpha$ implies a Hamilton cycle, and $\kappa>\alpha$ implies that the graph is Hamilton-connected \cite[Theorems 1 and 3]{CE}.
+\item A $2$-connected $d$-regular graph with $n\le3d$ is Hamiltonian \cite{Jackson}.
+\item A connected $d$-regular vertex-transitive graph has $\kappa\ge2(d+1)/3$ \cite{Watkins}.
+\item A $2$-connected $d$-regular graph with $n\le7d/2-7$ is Hamiltonian unless it belongs to the exceptional family of \cite{BHVJ}; every graph in that family has connectivity two.
+\end{enumerate}
+We will use the last assertion only for graphs whose connectivity is at least three.
+
+\begin{lemma}[Spectral connectivity and independence]\label{lem:spectral}
+Let $A$ be the adjacency matrix of a $d$-regular graph on $n$ vertices. Suppose its spectrum on $1^\perp$ lies in $[-\sigma,\rho]$, where $\sigma>0$ and $\rho<d$. Then the graph is connected and
+\[
+\alpha\le\frac{n\sigma}{d+\sigma},\qquad \kappa\ge d-\rho
+\]
+in the noncomplete case. In particular, a bound $|\theta|\le\lambda$ on the nonprincipal spectrum gives Hamiltonicity if
+\begin{equation}\label{eq:roughham}
+\lambda<d/2,\qquad n\lambda<d^2/2.
+\end{equation}
+\end{lemma}
+\begin{proof}
+The bound on $\rho$ excludes a second eigenvalue $d$. For a cut $S$ separating nonempty sets $X,Y$ of sizes $a,b$, take $z=b$ on $X$, $z=-a$ on $Y$, and $z=0$ on $S$. Then $z\perp1$ and
+\[
+(d-\rho)\|z\|^2\le z^T(dI-A)z
+=b^2e(X,S)+a^2e(Y,S)\le |S|\|z\|^2.
+\]
+For an independent set of size $a$, subtract $(a/n)1$ from its indicator vector and use the lower spectral bound. This gives $-da^2/n\ge-\sigma(a-a^2/n)$, as required. Under \eqref{eq:roughham}, connectivity exceeds $d/2$ and independence is less than $d/2$, so Chv\'atal--Erd\H{o}s applies; complete graphs are immediate.
+\end{proof}
+\begin{lemma}\label{lem:irregular}
+If a graph has minimum degree at least $\delta_0$ and second-largest adjacency eigenvalue at most $b\ge0$, then $\kappa\ge\delta_0-b$.
+\end{lemma}
+\begin{proof}
+The assertion is immediate if the right side is nonpositive or the graph is complete. Otherwise deletion of $c$ vertices leaving two components produces two diagonal blocks, each with row sums at least $\delta_0-c$. Each has largest eigenvalue at least this number. Eigenvalue interlacing gives $\delta_0-c\le\lambda_2\le b$. The same argument with $c=0$ rules out initial disconnection.
+\end{proof}
+
+\begin{lemma}[Representation-degree criterion]\label{lem:multiplicity}
+Let $\mu(G)$ be the smallest degree of a nontrivial irreducible complex representation of a nontrivial finite group $G$. If $G$ acts transitively on a $d$-regular graph of order $n\ge3$, with $d>0$, then its nonprincipal eigenvalues have absolute value at most $\sqrt{nd/\mu(G)}$. Put $R=n/d$. If
+\begin{equation}\label{eq:cubic}
+\mu(G)\ge R^3+2R,
+\end{equation}
+the graph is Hamiltonian.
+\end{lemma}
+\begin{proof}
+The adjacency operator commutes with $G$. Every nonzero eigenspace in the orthogonal complement of the constants contains a nontrivial irreducible constituent and hence has dimension at least $\mu(G)$. Since $\Tr(A^2)=nd$, the bound follows. Put $x=\sqrt{R/\mu(G)}<1$. For a noncomplete graph Lemma~\ref{lem:spectral} yields
+\[
+\kappa/d\ge1-x,\qquad \alpha/d\le Rx/(1+x).
+\]
+Condition \eqref{eq:cubic} implies $1-x^2\ge Rx$: both sides are nonnegative, and squaring is justified by
+\[
+(\mu-R)^2-R^3\mu=\mu(\mu-R^3-2R)+R^2\ge0.
+\]
+Thus $\kappa\ge\alpha$. The complete case is immediate.
+\end{proof}
+
+\begin{lemma}[A prescribed short path]\label{lem:path}
+If $\kappa(J)-\alpha(J)\ge\ell\ge1$, then any simple path of $\ell$ edges in $J$ lies in a Hamilton cycle, provided deletion of its internal vertices leaves at least three vertices.
+\end{lemma}
+\begin{proof}
+Delete its $\ell-1$ internal vertices, leaving its endpoints $x,y$. Connectivity decreases by at most $\ell-1$ and independence does not increase. The remaining graph has connectivity at least its independence number plus one, so it has a Hamilton $x$--$y$ path. Unite this path with the prescribed path.
+\end{proof}
+
+\begin{lemma}[Locally colored Euler tours]\label{lem:kotzig}
+Let $J$ be connected, with positive even degrees $2r_v$. At each vertex partition the incident edges into local color classes, independently at different vertices. There is an Euler tour whose consecutive edges, including the last and first, have different local colors at their common vertex if and only if each class at $v$ has size at most $r_v$.
+\end{lemma}
+\begin{proof}
+Necessity follows by pairing arrivals and departures. For sufficiency list the edges at $v$ in consecutive color classes and pair positions $i$ and $i+r_v$; the bound makes each pair bichromatic. These pairings decompose the edges into compatible closed trails. If two trails meet at $v$, take their transitions with colors $(a,b)$ and $(c,d)$, where $a\ne b$ and $c\ne d$. At least one of the cross-pairings $(a,c),(b,d)$ or $(a,d),(b,c)$ is bichromatic: failure of both would force one of $a=b$ or $c=d$. Such a cross-pairing merges the two trails. Connectedness permits repeated merging until only one remains.
+\end{proof}
+This is the local-transition version of Kotzig's theorem \cite{Kotzig}. On the edge set of $J$, join two edges when they meet and have different local colors. A compatible Euler tour becomes a Hamilton cycle in this transition graph. Whenever a group is arc-transitive on that graph and $|E(J)|$ is even, Lemma~\ref{lem:twofront} applies.
+
+\section{Soluble, alternating, linear, and symplectic groups}\label{sec:linear}
+We use existence and uniqueness of finite fields, cyclicity of their multiplicative groups, and the usual norm and trace maps. The norm of a finite-field extension is surjective on nonzero elements. Its trace is a nonzero linear map: its defining polynomial has degree smaller than the extension-field order and cannot vanish identically. These facts also give the nondegeneracy of the trace pairing.
+
+\begin{proposition}\label{prop:alternating}
+All symmetric and alternating groups have $\Pp$.
+\end{proposition}
+\begin{proof}
+For $S_n$ use the point stabilizer $S_{n-1}$ and a generator of the regular cyclic action on its $n$ points, repeated $n-1$ times. For $A_n$, odd $n$ is identical because an $n$-cycle is even. For $n=2m\ge4$, set
+\[
+r=(1\,2\,\cdots\,m)(m+1\,\cdots\,2m),\quad
+s_0=(1\,m+1)\cdots(m\,2m).
+\]
+Take $s=s_0$ for even $m$ and $s=s_0(1\,2)$ for odd $m$. Both $r,s$ are even. The word with $m-1$ copies of $r$, then $s$, then $m-1$ copies of $r$ visits the last $m$ points before the middle step and the first $m$ afterward, starting at $2m$. It witnesses the point-coset property. Induct using Lemma~\ref{lem:splice}; the groups of degrees at most two are immediate.
+\end{proof}
+
+\begin{proposition}\label{prop:gl}
+For every scalar subgroup $C\le\GL_d(q)$, the group $\GL_d(q)/C$ has $\Pp$.
+\end{proposition}
+\begin{proof}
+Induct on $d$, with the cyclic case $d=1$ immediate. The stabilizer $H$ of a nonzero vector is an extension of the additive group $\F_q^{d-1}$ by $\GL_{d-1}(q)$, so has $\Pp$. Multiplication by $\F_{q^d}^{\times}$ is a cyclic subgroup $K$ acting regularly on the nonzero vectors and containing every scalar. In $\GL_d(q)/C$, use the set of nonzero vectors modulo $C$. Its stabilizer is $(CH)/C\cong H$, and $K/C$ is regular. This is an exact factorization by two groups having $\Pp$; apply Corollary~\ref{cor:extension}.
+\end{proof}
+\begin{lemma}\label{lem:sl2}
+Let $K=\SL_2(Q)/C$, where $C$ is any scalar subgroup, and let $B$ be the image of its upper triangular subgroup. Then $\Tt(K,J)$ holds for every $J\le B$.
+\end{lemma}
+\begin{proof}
+For odd $Q$, the projective-line action is doubly transitive of even degree $Q+1$, giving $\Tt(K,B)$. For even $Q$, the norm-one subgroup of $\F_{Q^2}^{\times}$ embeds in $\SL_2(Q)$ as a cyclic group of order $Q+1$ acting regularly on projective points. Its intersection with $\F_Q^{\times}$ is trivial, so its repeated generator supplies the required word. In either case $B$ is soluble; Proposition~\ref{prop:solvable} and Lemma~\ref{lem:splice} refine from $B$ to $J$.
+\end{proof}
+\begin{theorem}\label{thm:sl}
+All scalar central quotients of $\SL_d(q)$ have $\Pp$.
+\end{theorem}
+\begin{proof}
+The case $d=2$ follows from Lemma~\ref{lem:sl2} and the solubility of $B$, and $d=1$ is trivial. For odd $q$, induct on $d\ge3$. Let $C$ have order $z$ and let $G=\SL_d(q)/C$ act on nonzero vectors modulo $C$. Its degree $(q^d-1)/z$ is even: $z$ divides $d$ and $q-1$; if $d$ is odd, $z$ is odd, and if $d$ is even, $(q^d-1)/(q-1)$ is even. Partition these points by their projective lines and join points in different parts. The parts have equal sizes. The action is arc-transitive because two independent vectors can be mapped to any other two, adjusting the determinant on a third basis vector. The stabilizer is the image of the nonzero-vector stabilizer, isomorphic to an additive group extended by $\SL_{d-1}(q)$; thus it has $\Pp$ by induction. Use the multipartite Hamilton path and Lemma~\ref{lem:twofront}.
+
+If $q=2$, then $\SL_d(2)=\GL_d(2)$, covered by Proposition~\ref{prop:gl}. For the remaining even $q$, $4\mid q$. Let $s=(q^d-1)/(q-1)$ be the number of projective points. The complete graph on them has odd order $s\equiv1\pmod4$ and an even number $s(s-1)/2$ of edges. Locally color an edge by its projective line. Each class has size $q$, at most $(s-1)/2$. Lemma~\ref{lem:kotzig} gives a compatible Euler tour. Its transition graph has unordered projective pairs as vertices; arcs correspond to triples of noncollinear points. The special linear group is transitive on these ordered triples, since one may adjust a basis map's determinant by scaling an image vector without changing its projective point. Thus the transition graph is arc-transitive and Hamiltonian.
+
+It remains to check its vertex stabilizer, also for scalar quotients. In a basis adapted to the two lines its preimage is
+\[
+\left\{\begin{pmatrix}A&W\\0&B\end{pmatrix}:
+A\in\operatorname{Mon}_2(q),\ B\in\GL_{d-2}(q),\ \det A\det B=1\right\},
+\]
+where $\operatorname{Mon}_2$ is the soluble group of invertible monomial matrices. The off-diagonal block is an additive normal subgroup. After dividing by $C$, projection to $\GL_{d-2}(q)/C_{d-2}$ is onto; here $C_{d-2}$ is the corresponding scalar subgroup. In the kernel multiply by the unique scalar making $B=I$; the remaining $A$ lies in $\operatorname{Mon}_2(q)\cap\SL_2(q)$, hence the kernel is soluble. Proposition~\ref{prop:gl} and extension closure give $\Pp$ for the stabilizer. The two-front construction and composition finish the proof.
+\end{proof}
+
+\begin{theorem}\label{thm:sp}
+All scalar central quotients of $\Sp_{2m}(q)$ have $\Pp$.
+\end{theorem}
+\begin{proof}
+Identify the symplectic space with $\F_{q^m}^2$ using the alternating form
+\[
+b(x,y)=\Tr_{\F_{q^m}/\F_q}(x_1y_2-x_2y_1).
+\]
+It is nondegenerate by the trace pairing. The subgroup $\SL_2(q^m)$ preserves it and is transitive on nonzero vectors, hence on $\F_q$-lines. In a scalar quotient $G$, let $H$ stabilize $\F_q(1,0)$ and $K$ be this subgroup's image. Then $G=KH$, and $K\cap H$ lies in the upper triangular subgroup of $K$. Lemmas~\ref{lem:sl2} and \ref{lem:transfer} give $\Tt(G,H)$.
+
+Induct on $m$ to prove $\Pp(H)$. The case $m=1$ is Theorem~\ref{thm:sl}. In a decomposition $V=\langle e,f\rangle\perp W$, $b(e,f)=1$, the full line stabilizer has a $p$-group kernel and Levi quotient $\F_q^{\times}\times\Sp(W)$, split by $\diag(a,T,a^{-1})$ in the order $(e,W,f)$. For completeness the kernel consists of
+\[
+e\mapsto e,\quad x\mapsto x+b(w,x)e\ (x\in W),\quad f\mapsto f+w+ce,
+\]
+with $w\in W,c\in\F_q$, so has order $q^{2m-1}$. In any scalar quotient the Levi quotient maps onto $\Sp(W)/C_W$, with cyclic kernel: when the $W$-block is a scalar coming from the original center, remove that scalar uniquely. Induction and extension closure give $\Pp(H)$, and composition gives $\Pp(G)$.
+\end{proof}
+The same conclusion holds for scalar quotients of symplectic similitude groups: their normal symplectic image has $\Pp$, and their multiplier quotient is cyclic. We will repeatedly use the analogous elementary observation for unitary groups.
+
+\section{Orthogonal and higher-dimensional unitary groups}\label{sec:classical}
+We recall the precise standard structure facts used here. For quadratic forms write $B(x,y)=Q(x+y)-Q(x)-Q(y)$. In odd characteristic assume $B$ nondegenerate; in characteristic two we first assume even dimension and $B$ nondegenerate. Witt decomposition and Witt extension are used in these settings. In odd characteristic the spinor norm $\theta:\Ogrp(V)\to\F_q^\times/(\F_q^\times)^2$ sends a reflection in $v$ to $[Q(v)]$, and
+\[
+\Omega(V)=\ker(\det)\cap\ker(\theta).
+\]
+In even characteristic the Dickson invariant $g\mapsto\rank(I-g)\bmod2$ is a homomorphism and its kernel is denoted $\Omega(V)$. The standard low-dimensional identifications needed below are
+\begin{align*}
+\Omega_3(q)&\cong\PSL_2(q) &&(q\text{ odd}),\\
+\Omega_4^+(q)&\cong\SL_2(q)\times\SL_2(q),\quad
+\Omega_4^-(q)\cong\SL_2(q^2) &&(q\text{ even}),\\
+\PSU_4(q)&\cong\mathrm P\Omega_6^-(q).
+\end{align*}
+These facts, including the meaning of the projective central quotients, are the classical group structure inputs of this section; see \cite[Chapters 7--12]{Taylor} and \cite[Sections 6--7]{Cameron}. We give the stabilizer and counting arguments rather than invoking further unlisted inheritance properties.
+
+\subsection{Orthogonal groups in odd characteristic}
+\begin{theorem}\label{thm:orthodd}
+For odd $q$, every group $I/C$ with $\Omega(V)\le I\le\Ogrp(V)$ and $C$ scalar has $\Pp$.
+\end{theorem}
+\begin{proof}
+Induct on $n=\dim V$, simultaneously for all $I,C$. In dimension at most two the isometry groups are soluble: in dimension two their norm models give dihedral groups of orders $2(q-1)$ and $2(q+1)$. In dimension three the stated $\PSL_2$ identification and the abelian quotient $\Ogrp/\Omega$ give the result by central and soluble extensions.
+
+For $n\ge4$, join two singular projective points when their $B$-pairing is nonzero. Normalize representatives $e,f$ so that $Q(e)=Q(f)=0$ and $B(e,f)=1$. Witt extension proves arc-transitivity for the full isometry group. The complement $W$ has dimension $n-2\ge2$. Every nondegenerate binary quadratic form over $\F_q$ represents all nonzero values: use $xy$ in the split case and the surjective quadratic-field norm in the nonsplit case. Consequently reflections in $W$ of square and nonsquare norms make $(\det,\theta)$ surjective onto $C_2^2$. They correct both invariants while fixing the chosen arc. Thus $\Omega$, $I$, and $I/C$ are arc-transitive.
+
+Here are the necessary exact counts. If $Z(V)$ counts zeroes of $Q$, including zero, a hyperbolic splitting gives
+\[
+Z(V)=(q-1)q^{n-2}+qZ(W).
+\]
+Indeed the equation $ab=-Q(w)$ has $q-1$ solutions when its right side is nonzero and $2q-1$ when it is zero. Starting with the anisotropic part of dimension at most two gives the following number $N$ of singular projective points:
+\[
+N=\begin{cases}(q^{2m}-1)/(q-1),&n=2m+1,\\
+(q^{2m-1}-1)/(q-1)+\varepsilon q^{m-1},&n=2m,
+\end{cases}
+\]
+where $\varepsilon=+1$ for split even dimension and $-1$ for nonsplit even dimension. Each neighbor of $\langle e\rangle$ has a unique representative $f+w-Q(w)e$, so $d=q^{n-2}$. The integer $N$ is even. Also $N/d<3/2$ in odd dimension and $N/d<3/2+1/3<2$ in even dimension $n\ge4$. Dirac therefore supplies a Hamilton cycle and Lemma~\ref{lem:twofront} gives the required coset word.
+
+To close the induction, the singular-line stabilizer in $\Ogrp(V)$ is $U_0\rtimes(\F_q^\times\times\Ogrp(W))$. Its additive radical is
+\[
+e\mapsto e,\quad x\mapsto x-B(x,w)e\ (x\in W),\quad f\mapsto f+w-Q(w)e,
+\]
+parametrized by $w\in W$; composition adds the parameter. This follows directly by preserving $Q$ and successively determining the images in the decomposition $(e,W,f)$. Since $U_0$ has odd $p$-power order, both invariants are trivial on it. The stabilizer in $I$ is therefore $U_0\rtimes D$ with $D\le\F_q^\times\times\Ogrp(W)$ containing $1\times\Omega(W)$. Let $J$ be its image in $\Ogrp(W)$ and $C_W$ the scalar image of $C$. The map $D/C\to J/C_W$ is onto and its kernel is cyclic: remove the scalar $W$-block and retain only the first diagonal coordinate. By induction $J/C_W$ has $\Pp$. Extension closure proves $\Pp$ for the stabilizer, then composition proves it for $I/C$.
+\end{proof}
+
+\subsection{A polarity estimate}
+\begin{lemma}\label{lem:polarity}
+Let a nondegenerate alternating or Hermitian form define a polarity on $\PG(d-1,Q)$, $d\ge3$, and let $M_{xy}=1$ if $y\in x^\perp$, including absolute-point diagonal entries. Put $c=(Q^{d-2}-1)/(Q-1)$. Then
+\[
+M^2=Q^{d-2}I+cJ.
+\]
+If the restriction to a set $X$ is $A+\eta I$, with $A$ a regular simple-graph adjacency matrix and $\eta$ constant, its nonprincipal spectrum lies in
+\[
+[-Q^{(d-2)/2}-\eta,\ Q^{(d-2)/2}-\eta].
+\]
+\end{lemma}
+\begin{proof}
+Every polar hyperplane has $(Q^{d-1}-1)/(Q-1)$ points, and two distinct polar hyperplanes meet in $c$ points. This gives the square identity. The constant vector is the eigenvector of the row sum; all eigenvalues on its perpendicular space have absolute value $Q^{(d-2)/2}$. Extend a vector perpendicular to $1_X$ by zero outside $X$, and apply that quadratic-form bound. Subtracting $\eta I$ gives the assertion.
+\end{proof}
+In particular, the coarse unitary spectral bound needed below follows without the complete spectrum computed by Piterman and Welker \cite{PW}. Their work concerns the same orthogonality graphs and provides a broader spectral and topological context.
+
+\subsection{Orthogonal groups in characteristic two}
+\begin{theorem}\label{thm:ortheven}
+For even $q$, the groups $\Omega_{2m}^{\varepsilon}(q)$ and $\Ogrp_{2m}^{\varepsilon}(q)$ have $\Pp$.
+\end{theorem}
+\begin{proof}
+Each nonsingular projective point has a unique representative with $Q(v)=1$. Join distinct such vectors when $B(v,w)=0$. Witt extension makes the full orthogonal group vertex- and arc-transitive. The symmetry $s_v(x)=x+B(x,v)v$ fixes $v$ and every neighbor $w$, and has Dickson invariant one. It corrects the invariant of an extension, so $\Omega$ too is vertex- and arc-transitive.
+
+Its vertex stabilizer is $\Sp_{2m-2}(q)$. To verify this, take a symplectic complement $W$ to $\langle v\rangle$ in $v^\perp$. For $T\in\Sp(W)$ the function $Q(Tx)-Q(x)$ has zero polarization and is the square of a unique linear functional $\ell_T$. The map $v\mapsto v$, $x\mapsto Tx+\ell_T(x)v$ is an isometry of $v^\perp$ and extends by Witt's theorem. Thus $\Ogrp(V)_v\to\Sp(W)$ is onto. Its kernel fixes $v^\perp$ pointwise and sends a complementary vector $z$, with $B(z,v)=1$, to $z+av$. Preserving $Q$ forces $a^2+a=0$. The kernel is therefore $\{1,s_v\}$, whose two Dickson invariants differ. Each fiber contains a unique element of $\Omega_v$, proving the identification.
+
+Put $r=q^{m-1}$. The zero count in the preceding proof, valid also in characteristic two for even dimension, gives
+\[
+N=r(qr-\varepsilon),\qquad d=r^2-1.
+\]
+For the degree, each vector coset modulo $\langle v\rangle$ in $v^\perp$ contains exactly one vector of norm one. For the spectrum, apply Lemma~\ref{lem:polarity} to the alternating form $B$, with $Q$ there equal to $q$, and $\eta=1$. Thus $\rho=r-1$, $\sigma=r+1$. For $m\ge3$, $r\ge q^2$ and
+\[
+\kappa\ge r^2-r,\qquad \alpha\le N/r\le qr+1<r^2-r.
+\]
+The last inequality follows from $r(r-q-1)>1$. Since $N$ is even, Chv\'atal--Erd\H{o}s, the stabilizer identification, and Theorem~\ref{thm:sp} finish the proof for $\Omega$. The cases $m\le1$ are soluble, and $m=2$ follows from the stated low-dimensional identifications. The full orthogonal group is an extension by a group of order two.
+\end{proof}
+In odd dimension in characteristic two, the usual nonsingular quadratic space has a one-dimensional polar radical of nonzero norm. The same unique-square correction used for $v^\perp$ identifies its isometry group with $\Sp_{2m}(q)$. In particular all projective orthogonal simple groups are covered by Theorems~\ref{thm:orthodd} and \ref{thm:ortheven} and central extension closure.
+
+\subsection{Unitary groups}
+Let $\bar a=a^q$ on $\F_{q^2}$. Hermitian forms are linear in the first variable. Nondegenerate forms admit orthonormal bases, because the norm onto $\F_q^\times$ is surjective. In dimension at least two there is a hyperbolic pair $e,f$ with $h(e,e)=h(f,f)=0$, $h(e,f)=1$; the trace map adjusts a chosen partner to be isotropic. Write $\U_n(q)$ for the isometry group and $\SU_n(q)$ for its determinant-one subgroup. Their scalar subgroups satisfy respectively $\lambda^{q+1}=1$ and also $\lambda^n=1$. The full scalar quotient of $\SU_n(q)$ is $\PSU_n(q)$.
+The group $\SU_2(q)$ is isomorphic to $\SL_2(q)$. In a hyperbolic basis the determinant-one unitary equations say that $a,d\in\F_q$ and $\bar b=-b$, $\bar c=-c$ for the entries of a matrix. In characteristic two these are exactly $\SL_2(q)$; otherwise conjugate by $\diag(\eta,1)$ with $\bar\eta=-\eta\ne0$. The determinant map $\U_n(q)\to\{a:a^{q+1}=1\}$ is onto, as seen in an orthonormal basis, and has kernel $\SU_n(q)$. Thus all scalar quotients of $\U_2(q)$ have $\Pp$, and in any dimension it suffices to prove the assertion for all scalar quotients of $\SU_n(q)$.
+
+\begin{theorem}\label{thm:unitaryhigher}
+If $q$ is odd, all scalar quotients of $\SU_n(q)$ and $\U_n(q)$ have $\Pp$. For arbitrary $q$ the same holds in dimensions $n\ge4$.
+\end{theorem}
+\begin{proof}
+For odd $q$, induct jointly for the two unitary groups, starting in dimensions one and two as above. The isotropic projective points in dimension $n\ge3$ number
+\[
+N_n=\frac{(q^n-\varepsilon)(q^{n-1}+\varepsilon)}{q^2-1},\qquad \varepsilon=(-1)^n.
+\]
+To check the count, if $A_n$ counts zero-norm vectors including zero, the norm fibers give $A_1=1$ and $A_n=(q+1)q^{2n-2}-qA_{n-1}$. Hence $A_n=q^{2n-1}+(-1)^n(q-1)q^{n-1}$ and $N_n=(A_n-1)/(q^2-1)$. The integer $N_n$ is even for odd $q$: use the even factor $q^{n-1}+1$ for even $n$ and $q^n+1$ for odd $n$, after dividing the other factor by $q^2-1$.
+
+Join two isotropic points when they are not orthogonal. Its degree is $D_n=q^{2n-3}$: the neighbors of $\langle e\rangle$ have representatives $f+w+ae$, where $w\in\langle e,f\rangle^\perp$ and $a+\bar a=-h(w,w)$, giving $q^{2n-4}q$ choices. Witt extension and determinant adjustment on the nonzero-dimensional complement prove $\SU_n$ arc-transitive. Also
+\[
+(q^2-1)(2D_n-N_n)
+=q^{2n-3}(q^2-2)-\varepsilon q^{n-1}(q-1)+1>0
+\]
+for $q\ge3,n\ge3$, since the possible negative second term has smaller absolute value than the first. Dirac and Lemma~\ref{lem:twofront} supply the coset word.
+
+The isotropic-line stabilizer has a $p$-group kernel of order $q^{2n-3}$ and quotient
+\[
+D=\{(a,B)\in\F_{q^2}^{\times}\times\U_{n-2}(q):a^{q-1}=\det B\},
+\]
+represented by $\diag(a,B,a^{-q})$. The kernel is given explicitly by
+\[
+e\mapsto e,\quad x\mapsto x-h(x,w)e,\quad f\mapsto f+w+ce,
+\qquad c+\bar c=-h(w,w).
+\]
+These formulas follow by preservation of $h$ and also verify the count. After any scalar quotient $C$, projection $D/C\to\U_{n-2}(q)/C_{n-2}$ is onto because $a\mapsto a^{q-1}$ is onto the norm-one group. Its kernel is $\F_q^\times$: remove the scalar $B$-block, leaving $a^{q-1}=1$. Induction gives $\Pp$ for the stabilizer, hence for the special unitary quotient. The determinant extension then gives the full unitary quotients.
+
+Now let $q$ be even. Dimension four follows from $\PSU_4(q)\cong\mathrm P\Omega_6^-(q)$ and central extensions. For $n\ge5$ use nonisotropic projective points, with orthogonality as adjacency. The preceding vector count gives
+\[
+N=\frac{q^{n-1}(q^n-\varepsilon)}{q+1},\qquad
+d=\frac{q^{n-2}(q^{n-1}+\varepsilon)}{q+1}.
+\]
+The degree is the nonisotropic point count in a nondegenerate orthogonal complement. The action is arc-transitive: normalize an orthogonal pair to norm one, extend its isometry, and correct the determinant on the complement. Lemma~\ref{lem:polarity}, with ambient field order $q^2$, bounds the nonprincipal spectrum by $r=q^{n-2}$. In terms of $r$,
+\[
+N=\frac{qr(q^2r-\varepsilon)}{q+1},\quad
+d=\frac{r(qr+\varepsilon)}{q+1},\quad
+\alpha\le\frac{qr(q^2r-\varepsilon)}{qr+q+1+\varepsilon}<q^2r.
+\]
+Since $r\ge q^3$,
+\[
+\frac{d-r}{r}\ge\frac{q^4-q-2}{q+1}\ge q^2,
+\]
+the last inequality being $(q-2)(q^3+q^2+q+1)\ge0$. Thus $\kappa>\alpha$ and the graph is Hamiltonian. The number $N$ is even. Its stabilizer in $\SU_n$ is $\{\diag((\det B)^{-1},B):B\in\U_{n-1}\}\cong\U_{n-1}$, and a scalar quotient makes this a scalar quotient of $\U_{n-1}$. Induction starting at $n=4$, followed by the determinant extension, completes the proof without using dimension three.
+\end{proof}
+
+\section{Three-dimensional unitary groups}\label{sec:unitarythree}
+The odd-characteristic groups are already covered. Throughout this section $q$ is even. The group $\PSU_3(2)\cong3^2:Q_8$ is soluble; this low-parameter identification is standard \cite{Taylor,Atlas}. Hence assume $q\ge4$.
+
+\subsection{The unital block graph}
+The isotropic points form a $2$-$(v,k,1)$ design with
+\[
+v=q^3+1,\quad k=q+1,\quad r=q^2,\quad b=q^2(q^2-q+1).
+\]
+Blocks are intersections of secant projective lines with the isotropic set, $r$ counts blocks through a point, and $b$ counts blocks. Two distinct isotropic points are not orthogonal, because the Witt index is one. Their line is a nondegenerate Hermitian plane with $q+1$ isotropic points. Uniqueness of a projective line proves the design property and gives the parameters by incidence counting.
+Join intersecting blocks. The degree is $d=(q+1)(q^2-1)$. If $T$ is the block-by-point incidence matrix, then
+\[
+T^TT=(q^2-1)I+J,\qquad TT^T=(q+1)I+A.
+\]
+Comparison of the nonzero eigenvalues of the Gram matrices gives nonprincipal adjacency eigenvalues $q^2-q-2$ and $-(q+1)$. Lemma~\ref{lem:spectral} yields $\kappa\ge q^3+1$ and $\alpha\le q^2-q+1$. Thus this block graph is Hamiltonian for every $q\ge2$.
+
+\begin{proposition}\label{prop:unital}
+If $q$ is even and $\gcd(3,q+1)=1$, then $\Pp(\PSU_3(q))$ holds.
+\end{proposition}
+\begin{proof}
+In a hyperbolic basis with middle vector of norm one, the isotropic-point stabilizer contains
+\[
+u(x,z)=\begin{pmatrix}1&x^q&z\\0&1&x\\0&0&1\end{pmatrix},\quad
+z+z^q=x^{q+1},\qquad h(t)=\diag(t,t^{q-1},t^{-q}).
+\]
+Substitution verifies preservation of the form and determinant one. Secants through $\langle e_1\rangle$ are parametrized by the middle-to-last coordinate in $\F_{q^2}$. The first matrices induce translations and the second induce multiplication by $t^{2q-1}$. The latter power map has kernel of size $\gcd(2q-1,q^2-1)=\gcd(3,q+1)$. Under the stated coprimality, this action on the pencil is doubly transitive. The special unitary group is transitive on isotropic points by Witt extension and determinant adjustment; hence it, and its projective image, are arc-transitive on the block graph. There are $b$ vertices, an even number.
+
+A block is the polar line of a nonisotropic point. Its stabilizer is a scalar quotient of $\U_2(q)$ and has $\Pp$, as established in Section~\ref{sec:classical}. Apply Lemma~\ref{lem:twofront} and composition.
+\end{proof}
+For $q=2^f$ coprimality holds exactly when $f$ is even. For odd $f$ the pencil multipliers have three orbits, so the whole block graph does not provide the required arc-transitive action. Instead use the nonisotropic orthogonality graph $\Gamma_q$. It has $q^2(q^2-q+1)$ vertices and degree $q(q-1)$; $\SU_3$ is arc-transitive, and its nonisotropic-point stabilizer is a scalar quotient of $\U_2$. These follow from the count and orthonormal-pair argument of Theorem~\ref{thm:unitaryhigher}. It remains to prove Hamiltonicity.
+
+\subsection{Singer orbits and their difference labels}
+Put
+\[
+F=\F_{q^2},\quad E=\F_{q^6},\quad E_0=\F_{q^3},\quad
+L=q^2-q+1,\quad R=q^2+q+1,\quad m=(L-1)/2.
+\]
+Use $h(x,y)=\Tr_{E/F}(xy^{q^3})$ on the three-dimensional $F$-space $E$. It is Hermitian: the $q$-power map on the trace cyclically reorders the summands needed for conjugate symmetry. It is nondegenerate by the trace pairing. Its projective points form a regular torsor for the cyclic Singer group $\Sigma=E^\times/F^\times$ of order $LR$. The norm $\nu(x)=x^{q^3+1}$ induces a surjection
+\[
+\bar\nu:\Sigma\longrightarrow E_0^\times/\F_q^\times.
+\]
+The kernel $K$ is cyclic of order $L$. Its representatives have norms in $\F_q^\times$, so their multiplications preserve $h$ up to nonzero scalar. We identify $K$ additively with $\Z/L\Z$ and use it as a graph automorphism group; membership in $\PSU_3(q)$ is not required.
+
+Two projective points belong to one $K$-orbit exactly when their norms are proportional over $\F_q$. Also $h(x,x)=\Tr_{E_0/\F_q}(\nu(x))$. The orbit set $\mathcal A$ therefore identifies with $\PG(2,q)$. Its $q+1$ isotropic orbits are the trace-zero line, leaving a set $X$ of $q^2$ nonisotropic orbits.
+\begin{lemma}\label{lem:arc}
+Every $K$-orbit is an arc: any projective line contains at most two of its points.
+\end{lemma}
+\begin{proof}
+Three collinear distinct points of one orbit could be written, after multiplying by a common scalar from $E^\times$, as $[1],[t],[a+bt]$, with $t\notin F$ and $a,b\in F^\times$. Rescale $t$ over $F^\times$ to make $\nu(t)=1$, possible by surjectivity of $F^\times\to\F_q^\times$ under the norm. Then
+\[
+\nu(a+bt)=a^{q+1}+b^{q+1}+ab^qt^{-1}+a^qbt\in\F_q^\times.
+\]
+This gives $a^qbt^2-ct+ab^q=0$ for some $c\in\F_q$, contradicting the fact that $t\notin F$ has degree three over $F$.
+\end{proof}
+Singer-invariant arcs are also studied in \cite{Kestenband,StormeVM}; the norm proof here avoids using their classification results.
+
+Choose a representative $x_a$ in each orbit and put $W_{ab}=|x_a^\perp\cap b|$. The matrix is symmetric, has entries in $\{0,1,2\}$, and has row sum $q^2+1$. Symmetry follows by counting orthogonal pairs between equal-sized orbits. Lemma~\ref{lem:polarity}, restricted to the $K$-invariant subspace, bounds its nonprincipal spectrum by $q$ in absolute value. If $W_{ab}=2$, write the neighbors of $x_a$ in $b$ as $u\cdot x_b,v\cdot x_b$ and set
+\[
+\Delta(a,b)=\{v-u,u-v\}\subset K\setminus\{0\}.
+\]
+Changes of representatives translate the two voltages equally, and reversal negates both, so this label is well defined and symmetric, also at diagonal positions.
+\begin{lemma}[Complete row labelling]\label{lem:labels}
+For each row $a$, the double-intersection positions are in bijection, through $\Delta(a,b)$, with $K\setminus\{0\}$ modulo sign. If $S=-S\subset K\setminus\{0\}$, their indicator matrix $M_S$ is symmetric, has row sum $|S|/2$, and has operator norm at most $|S|/2$.
+\end{lemma}
+\begin{proof}
+For $t\ne0$, let $\ell=x_a^\perp$. A nonidentity Singer element fixes no line: invariance under a multiplier $s\notin F$ would make a two-dimensional $F$-space invariant under $F[s]=E$. Thus $\ell$ and $t\ell$ meet at one point. Equivalently there is one ordered pair $(y,t\cdot y)$ on $\ell$. These points are in one orbit $b$ and, by Lemma~\ref{lem:arc}, give exactly its two intersections. Conversely they determine precisely the differences $t,-t$. These are distinct since $L$ is odd. The matrix claims follow from the symmetry of the labels and the row-sum norm bound.
+\end{proof}
+Let $D=M_{K\setminus\{0\}}$ and let $B$ indicate the entries of $W$ equal to one. Then $W=B+2D$, $D1=m1$, and $B1=(q+1)1$. Consequently the spectrum of $D$ on $1^\perp$ has absolute value at most $s=q+1/2$.
+
+\subsection{Filtering low-order differences}
+Assume $q=2^f\ge128$, $f$ odd. Let $\varphi(n)$ be Euler's function and $\tau(n)$ the positive-divisor count.
+\begin{lemma}\label{lem:arithmetic}
+The integer $L=3u$ has $3\nmid u$ and every prime divisor of $u$ is at least $19$. Hence
+\[
+\tau(L)\le2(L/3)^{1/4}<2\sqrt q,\qquad
+\varphi(L)\ge2(L/3)^{3/4}.
+\]
+\end{lemma}
+\begin{proof}
+Since $q\equiv-1\pmod3$, $L=(q+1)^2-3q\equiv3\pmod9$. If a prime $p\ne3$ divides $L$, $q$ has order six modulo $p$ and $p\equiv1\pmod6$. The candidates below $19$ are $7,13$. The order of $2$ modulo $7$ is three; modulo $13$ it is twelve, and an odd power retains an order divisible by four. Both candidates are excluded. For $p\ge19$, $a\ge1$,
+\[
+a+1\le2^a\le p^{a/4},\qquad p^{a-1}(p-1)\ge p^{3a/4},
+\]
+where $p-1\ge p/2\ge p^{3/4}$ proves the latter inequality. Multiply over $u$ and use $\tau(3)=\varphi(3)=2$.
+\end{proof}
+Define
+\[
+S_0=\{t\in K\setminus\{0\}:\ord(t)\le q\},\qquad
+r=|S_0|/2=\frac12\sum_{\substack{h\mid L\\2\le h\le q}}\varphi(h)<q^{3/2},
+\]
+using $r\le q\tau(L)/2$. The matrix $E_1=D-M_{S_0}$ has row sum $m-r$ and nonprincipal spectral absolute value at most $s+r$. Restrict to $X$ and remove diagonal entries to obtain $H_q$, the simple graph retaining precisely the double edges whose difference orders exceed $q$.
+\begin{lemma}\label{lem:filtered}
+For these parameters,
+\[
+\alpha(H_q)\le2q+3+2r,\qquad
+\kappa(H_q)\ge m-2r-2q-7/2,\qquad
+\kappa(H_q)-\alpha(H_q)>q.
+\]
+\end{lemma}
+\begin{proof}
+For an independent-set indicator $v$ of size $a$, extended by zero to $\mathcal A$, one has $v^TE_1v\le a$. With $v=(a/R)1+z$,
+\[
+a\ge(m-r)a^2/R-(s+r)(a-a^2/R)
+=a^2/2-(s+r)a,
+\]
+because $m+s=R/2$. This gives the independence bound. Deleting the $q+1$ isotropic rows and a possible loop leaves minimum degree at least $m-r-q-2$. Interlacing and diagonal deletion give $\lambda_2(H_q)\le q+r+3/2$. Apply Lemma~\ref{lem:irregular}. Finally
+\[
+\kappa-\alpha-q\ge\tfrac12(q^2-11q-13-8r)
+>\tfrac12(q^2-11q-13-8q^{3/2})>0,
+\]
+since for $q\ge128$,
+\[
+8/\sqrt q+11/q+13/q^2
+\le1/\sqrt2+11/128+13/16384
+<3/4+1/8+1/128<1.
+\]
+\end{proof}
+\begin{lemma}\label{lem:generatorpath}
+The graph $H_q$ has a Hamilton cycle containing a path of $q$ edges whose differences all generate $K$.
+\end{lemma}
+\begin{proof}
+The generating-label matrix of Lemma~\ref{lem:labels} has row sum $\varphi(L)/2$. Its simple restriction to $X$ has minimum degree at least $\varphi(L)/2-q-2$, and
+\[
+\varphi(L)/2\ge(L/3)^{3/4}\ge q^{3/2}/(2\sqrt2)\ge4q.
+\]
+Here $L\ge3q^2/4$ and $q\ge128$. A longest path in this subgraph has length at least its minimum degree, since all neighbors of an endpoint lie on it. Take $q$ edges of that path. Their difference orders are $L>q$, so they lie in $H_q$. Lemmas~\ref{lem:filtered} and \ref{lem:path} preserve this path in a Hamilton cycle; deletion of its internal vertices leaves $q^2-q+1\ge3$ vertices.
+\end{proof}
+
+\subsection{Total voltage and the subgroup dichotomy}
+\begin{lemma}\label{lem:kneser}
+Let $K$ be a finite abelian group and $\delta_1,\ldots,\delta_t\in K$. If every proper subgroup $A<K$ satisfies $|\{i:\delta_i\notin A\}|\ge[K:A]-1$, then $\sum_i\{0,\delta_i\}=K$.
+\end{lemma}
+\begin{proof}
+Let $S$ be the sumset and $A$ its period subgroup. If $S\ne K$, $A$ is proper and Kneser's addition theorem \cite{Kneser} in $K/A$ gives
+\[
+|S/A|\ge1+|\{i:\delta_i\notin A\}|\ge[K:A],
+\]
+a contradiction. To iterate the two-summand theorem, note that every period of a partial sumset remains a period of the final sumset; thus all partial sums in this quotient are aperiodic.
+\end{proof}
+Orient the cycle from Lemma~\ref{lem:generatorpath} and let its edge voltages be $u_i,v_i$, with differences $\delta_i=v_i-u_i$. For a proper subgroup $A$ of order at most $q$, no difference lies in $A$, as every difference order exceeds $q$. There are $q^2$ such edges, more than $[K:A]-1\le L-1$. If $|A|>q$, the preserved path gives $q$ differences outside $A$, whereas $[K:A]<L/q=q-1+1/q<q$. Thus the same cycle satisfies every subgroup condition. Its attainable total voltages are
+\[
+\sum_i u_i+\sum_i\{0,\delta_i\}=K.
+\]
+Choose total voltage one. If $a_i$ is the orbit sequence and $c_i$ its cumulative voltages, its lift lists
+\[
+(j+c_i)\cdot x_{a_i},\qquad 0\le j<L,\quad0\le i<q^2,
+\]
+with $j$ the outer index. For each $i$ these are all points of its fiber; different $i$ give different fibers. The voltage definition proves all edges, and each quotient traversal advances $j$ by one. This is a Hamilton cycle of $\Gamma_q$. This cyclic lifting principle is the usual voltage-cover construction \cite{GrossTucker}; the difference control above guarantees its generating total voltage.
+
+For $q=32$ the same argument works by exact estimates: $L=993=3\cdot331$, with $331$ prime, $m=496$, $r=1$, and $\varphi(L)/2=330$. The bounds preceding the large-$q$ estimates give
+\[
+\kappa(H_{32})-\alpha(H_{32})\ge496-4-128-13/2=715/2>32,
+\]
+and the generating-difference subgraph has minimum degree at least $330-32-2=296\ge32$. Primality of $331$ needs division only by $2,3,5,7,11,13,17$. Path extension and the subgroup dichotomy apply unchanged. Section~\ref{sec:certificate} supplies $q=8$, completing Theorem~\ref{thm:introunitary}.
+
+\begin{theorem}\label{thm:unitaryall}
+Every scalar central quotient of $\SU_n(q)$ or $\U_n(q)$ has $\Pp$.
+\end{theorem}
+\begin{proof}
+Theorem~\ref{thm:unitaryhigher} leaves only even $q$ in dimension three. For $q=2$ use the soluble group above; for even $f$ use Proposition~\ref{prop:unital}; for odd $f\ge3$ use Theorem~\ref{thm:introunitary} and the arc-transitivity and stabilizer of $\Gamma_q$. Central extension closure gives all special unitary scalar quotients, and the determinant extension gives all full unitary scalar quotients.
+\end{proof}
+
+\section{Exceptional groups of Lie type}\label{sec:exceptional}
+We make the structural inputs for this section explicit. Standard split $BN$-pair theory, including the twisted groups, provides a soluble Borel group $B=U\rtimes T$, a finite relative Coxeter group $(W,S)$ with longest element $w_0$, and Bruhat cells of sizes
+\[
+Q_w=|BwB/B|,\qquad Q_w\ge q^{\ell(w)},\qquad
+Q_{w_0w}=Q_{w_0}/Q_w.
+\]
+Representatives in the normalizer are understood in the notation $BwB$. The parameters on simple reflections are positive powers of the actual field parameter $q$. For $J\subseteq S$, the standard parabolic has decomposition $P_J=U_J\rtimes L_J$, with $U_J$ a $p$-group. If $w_0Jw_0^{-1}=J$, its opposite has the same Levi $L_J$ and intersects it in precisely $L_J$. These facts are standard in \cite{CarterSimple,CarterFinite}; see also \cite[Section 2]{Garonzi} for the finite $BN$-pair setup, including twisted types.
+
+The finite Levi groups used below have a normal central product of their indicated semisimple components and an abelian quotient. Their actions below extend the natural projective actions of these components; the center acts trivially. More explicitly, let $H_L$ be a point stabilizer in the indicated action and let $D\lhd L$ be the central product of root components. Then $H_L\cap D$ is the stabilizer in $D$ of that same geometric object, hence the central image of the explicit component stabilizer. The quotient $H_L/(H_L\cap D)$ embeds in the abelian group $L/D$. This is the usual Levi structure from the root subdiagram. Thus, when a component stabilizer and all its scalar quotients have $\Pp$, the full Levi stabilizer has $\Pp$ by central and abelian extensions. The same observation applies to a product of components: its quotient by the product center is a direct product of the component central quotients, and extension closure applies successively. These are the only structural uses of Levi groups in the argument.
+
+\subsection{Odd characteristic and partial opposition}
+Write $P_W(t)=\sum_{w\in W}t^{\ell(w)}$. For $J$ stable under opposition, the orbital on $G/P_J$ determined by $P_Jw_0P_J$ is self-paired and arc-transitive. Its degree and order satisfy
+\begin{equation}\label{eq:oppositionratio}
+d=|U_J|,\qquad N=|G:P_J|,\qquad
+R_0=N/d=\sum_{w\in W^J}Q_w^{-1}
+\le P_W(1/q)/P_{W_J}(1/q).
+\end{equation}
+Here $W^J$ consists of minimal right coset representatives. The equality uses the length-reversing bijection $w\mapsto w_0ww_J$ on $W^J$ and its weighted analogue; $w_J$ is the longest element of $W_J$. The degree follows because opposite parabolics intersect in $L_J$. For odd $q$, $N\equiv|W:W_J|\pmod2$.
+
+\begin{proposition}\label{prop:oddexceptional}
+Every exceptional simple group in odd defining characteristic has $\Pp$.
+\end{proposition}
+\begin{proof}
+Use the following opposition-stable choices. The displayed polynomials follow from the Coxeter degree formula for $P_W$ \cite{Humphreys}.
+\begin{center}\small
+\begin{tabular}{lll}
+\toprule
+Type & $W/W_J$; index & $P_W(t)/P_{W_J}(t)$\\
+\midrule
+$^2G_2$ & $A_1/1$; $2$ & $1+t$\\
+$G_2,{}^3D_4$ & $G_2/A_1$; $6$ & $(1-t^6)/(1-t)$\\
+$F_4,{}^2E_6$ & $F_4/B_3$; $24$ & $\dfrac{(1-t^8)(1-t^{12})}{(1-t)(1-t^4)}$\\[2mm]
+$E_6$ & $E_6/A_5$; $72$ & $\dfrac{(1-t^8)(1-t^9)(1-t^{12})}{(1-t)(1-t^3)(1-t^4)}$\\[2mm]
+$E_7$ & $E_7/E_6$; $56$ & $\dfrac{(1-t^{10})(1-t^{14})(1-t^{18})}{(1-t)(1-t^5)(1-t^9)}$\\[2mm]
+$E_8$ & $E_8/E_7$; $240$ & $\dfrac{(1-t^{20})(1-t^{24})(1-t^{30})}{(1-t)(1-t^6)(1-t^{10})}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+For $0<t\le1/3$ every entry is less than two. The first two are at most $4/3$ and less than $3/2$. For the next two, bounding numerators by one gives $243/160$ and $6561/4160$. In the last two the denominator exceeds $(2/3)(26/27)^2>1/2$. Hence $d>N/2$ and $N$ is even, so Dirac and Lemma~\ref{lem:twofront} apply.
+
+The Levi groups in the first four rows have only classical components (or are tori). In $E_6$ delete the branch-end root, leaving $A_5$; opposition fixes that root. The relative Weyl groups $G_2,F_4$ and those of $E_7,E_8$ have central longest elements, ensuring the required stability. In $^2E_6$ the chosen absolute Levi is $^2A_5$, so the classical unitary result applies. In succession the proved $E_6$ result handles the $E_7$ Levi, and the $E_7$ result handles the $E_8$ Levi. Every parabolic stabilizer has $\Pp$ by its $p$-group radical and these Levi groups. Compose the words. The nonsimple parameter $^2G_2(3)'\cong\PSL_2(8)$ is covered separately by Theorem~\ref{thm:sl}.
+\end{proof}
+
+\subsection{Changing parity inside a Levi subgroup}
+\begin{lemma}\label{lem:orbital}
+For $H<G$ and $g\notin H$ with $g^2=1$, the orbital of $(H,gH)$ on $G/H$ is an arc-transitive simple graph with
+\[
+N=|G|/|H|,\qquad d=|H|/|H\cap gHg^{-1}|.
+\]
+\end{lemma}
+\begin{proof}
+The involution exchanges the two endpoints, so the orbital is self-paired. Its neighbors at $H$ are $HgH/H$, of the stated size.
+\end{proof}
+\begin{lemma}[Levi lifting]\label{lem:levilift}
+Suppose $P=U_P\rtimes L$ has an involution $a$ taking it to the opposite parabolic with intersection $L$. Suppose $a$ acts trivially on $L/Z(L)$. Let $L$ have an even-degree transitive action of degree $M$, with center acting trivially and stabilizer $H_L$ having $\Pp$. Suppose an involution $b\in L$ commutes with $a$ and moves the chosen point; let $\delta$ be the degree of its self-paired orbital in this action. There is an arc-transitive graph for $G$ with stabilizer having $\Pp$ and
+\[
+N=|G:P|M,\qquad d=|U_P|\delta,\qquad R=N/d=R_0M/\delta.
+\]
+If $\mu(G)\ge R^3+2R$, then $\Pp(G)$.
+\end{lemma}
+\begin{proof}
+The group $a$ normalizes $H_L$, since its action on $L/Z(L)$ is trivial and $Z(L)\le H_L$. Put $H=U_P\rtimes H_L$ and $g=ab$. Then $g^2=1$, $g\notin H$, and
+\[
+H\cap gHg^{-1}=H_L\cap bH_Lb^{-1}.
+\]
+Indeed the intersection lies in the common Levi of the opposite parabolics; their projections give exactly this subgroup. Lemma~\ref{lem:orbital} yields the parameters. The group $H$ has $\Pp$ by extension closure. Lemma~\ref{lem:multiplicity} proves Hamiltonicity, and Lemma~\ref{lem:twofront} and composition finish.
+\end{proof}
+
+We verify the involutions needed in this lemma rather than assuming that normalizing a Levi means centralizing it. In characteristic two, standard Chevalley representatives $n_\alpha(1)$ have square $h_\alpha(-1)=1$ and satisfy the Coxeter braid relations. Their products $n_w$ obey
+\[
+n_wx_\alpha(t)n_w^{-1}=x_{w\alpha}(t).
+\]
+The signs in these standard root relations disappear in characteristic two \cite[Chapters 6--8]{CarterSimple}. Let $J_{\rm abs}$ be an absolute Levi diagram. In each case below $w=w_0w_{J_{\rm abs}}$ is an involution fixing its root subsystem pointwise. Thus $a=n_w$ centralizes its root groups and takes the parabolic radical to the opposite radical. It normalizes $L$, and acts identically modulo the center: for $l\in L$ its commutator with $a$ centralizes the derived algebraic Levi and therefore lies in the algebraic center, hence in $Z(L)$ on finite points. The required root checks are:
+\begin{itemize}
+\item $F_4/B_3$ and $E_7/D_6$: both longest elements restrict to $-1$ on the Levi root space.
+\item $E_6/A_5$: $w_0$ restricts to the longest element of the branch-deleted $A_5$. The same word works for $^2E_6/{}^2A_5$, and is fixed by its diagram automorphism.
+\item $G_2/A_1$ and $^3D_4/A_1$: take the fixed central root in the latter absolute $D_4$ diagram. Its reflection times $w_0=-1$ fixes that root; the word is triality-invariant.
+\item In $^2F_4$, take the absolute Levi $A_1\times A_1$ on the two nonadjacent end roots exchanged by the exceptional defining map. Multiply $w_0=-1$ by their commuting reflections. It fixes both roots pointwise and is invariant under that map.
+\end{itemize}
+For the twisted cases the standard representatives are fixed as well: the defining map permutes these root representatives, whose parameters are all one. Thus $a$ belongs to the finite group, not merely an automorphism extension. Its image in the simple central quotient retains all the stated properties.
+
+We use the following ordinary complex degree bounds from \cite[Theorem 2.1 and Sections 5.3--5.10]{Lubeck}. Here $\Phi_i=\Phi_i(q)$ denotes a cyclotomic polynomial, and $q$ is even:
+\begin{center}\small
+\begin{tabular}{lll}
+\toprule
+Group & lower bound for $\mu$ & consequence\\
+\midrule
+$E_6(q)$ & $q\Phi_8\Phi_9$ & $\mu\ge q^{11}$\\
+$F_4(q)$ & $\tfrac12q\Phi_1^2\Phi_3^2\Phi_8$ & $\mu\ge q^{11}/8$\\
+$^2E_6(q)$ & $q\Phi_8\Phi_{18}$ & $\mu\ge7q^{11}/8$\\
+$E_7(q)$ & $q\Phi_7\Phi_{12}\Phi_{14}$ & $\mu\ge q^{17}/4$\\
+$G_2(q),\ q\ge4$ & $q^3-1$ & \\
+$^3D_4(q)$ & $q(q^4-q^2+1)$ & \\
+$^2F_4(q),\ q\ge8$ & $q^4(q-1)\sqrt{q/2}$ & \\
+\bottomrule
+\end{tabular}
+\end{center}
+For $q=2$ the first four ordinary minima are respectively $2482,833,1938,141986$, satisfying the displayed bounds. These are bounds for ordinary representations of the simple groups: pullback to the standard simply connected group preserves irreducibility. Exceptional projective representations of larger Schur covers, such as the degree $52$ representation of $2.F_4(2)$, are not being used. The coarse bounds follow from
+\[
+\Phi_3\ge q^2,\ \Phi_7\ge q^6,\ \Phi_8\ge q^4,\ \Phi_9\ge q^6,\quad
+\Phi_{12}\ge\tfrac34q^4,\ \Phi_{14}\ge\tfrac12q^6,\
+\Phi_{18}\ge\tfrac78q^6,
+\]
+and $(q-1)^2\ge q^2/4$.
+
+\begin{proposition}\label{prop:fourtypes}
+In even characteristic, $F_4(q),E_6(q),{}^2E_6(q),E_7(q)$ have $\Pp$.
+\end{proposition}
+\begin{proof}
+We give the even Levi actions, including their stabilizers and an appropriate commuting involution $b$.
+
+For $E_6$, use the $A_5$ Levi on ordered pairs of distinct projective points in dimension six. Set $s_0=(q^6-1)/(q-1)$. Then $M=s_0(s_0-1)$ and
+\[
+\delta=(s_0-q-1)(s_0-q^2-q-1).
+\]
+The orbital requires all four points to be linearly independent. Its involution interchanges basis vectors $1,3$ and $2,4$, and has determinant one in characteristic two. Its stabilizer has $\Pp$ by the block-matrix proof in Theorem~\ref{thm:sl}, replacing $\operatorname{Mon}_2$ by the diagonal group: the additive radical remains, projection is onto a scalar quotient of $\GL_4$, and the kernel is the cyclic determinant-one diagonal group. The opposition polynomial gives $R_0<256/105<5/2$ at $1/q\le1/2$, and
+\[
+(q+1)/s_0\le1/21,\quad(q^2+q+1)/s_0\le1/9,\quad
+M/\delta<189/160<6/5.
+\]
+Thus $R<3$.
+
+For $F_4$, use its $B_3$ component $\Sp_6(q)$ acting on negative-type quadratic forms with a fixed symplectic polarization. The action is transitive with stabilizer $\Ogrp_6^-(q)$, and standard classical group orders give $M=q^3(q^3-1)/2$, an even integer. For a fixed form $Q$, take a nonzero singular vector $v$ and the symplectic involution $b(x)=x+B(x,v)v$. It changes $Q$ to $Q_v(x)=Q(x)+B(x,v)^2$. The map $v\mapsto Q_v$ is injective and $\Ogrp(Q)$ is transitive on nonzero singular vectors, so
+\[
+\delta=Z(Q)-1=(q^2-1)(q^3+1).
+\]
+Here $Z(Q)$ is the zero-vector count already proved in Section~\ref{sec:classical}. Thus $M/\delta<q$ and $R_0<32/15<3$, giving $R<3q$.
+
+For $^2E_6$, use its $^2A_5$ component on nonisotropic projective points in dimension six. Its stabilizer is a scalar quotient of $\U_5(q)$, and
+\[
+M=\frac{q^5(q^6-1)}{q+1},\quad
+\delta=\frac{q^4(q^5+1)}{q+1},\quad M/\delta<q^2.
+\]
+Take $b$ interchanging two orthogonal unit vectors. The relative opposition bound is again $F_4/B_3$, so $R<3q^2$.
+
+For $E_7$, use its $D_6$ component on norm-one nonsingular points in the split twelve-dimensional quadratic space. The stabilizer is $\Sp_{10}(q)$ and
+\[
+M=q^5(q^6-1),\qquad \delta=q^{10}-1,\qquad M/\delta<q.
+\]
+An involution exchanging adjacent norm-one vectors $v,w$ is explicit. Put $u=v+w$ and choose $z\in u^\perp$ with $B(v,z)=1$, possible since $v\notin\langle u\rangle$. Then
+\[
+b(x)=x+B(x,u)z+B(x,z)u+Q(z)B(x,u)u
+\]
+preserves $Q$: the additional quadratic term and the mixed term both equal $Q(z)B(x,u)^2$ and cancel. Its nilpotent part has square zero and rank two, so it is a Dickson-zero involution taking $v$ to $w$. The $E_7/D_6$ opposition polynomial is
+\[
+\frac{(1-t^{12})(1-t^{14})(1-t^{18})}{(1-t)(1-t^4)(1-t^6)},
+\]
+at most $2048/945<3$ for $t\le1/2$. Thus $R<3q$.
+
+All the stabilizers just listed, with their scalar quotients, have $\Pp$ by Sections~\ref{sec:linear}--\ref{sec:unitarythree}; full Levi stabilizers add central and abelian factors as explained above. The chosen $b$ lie in the root components, hence commute with $a$. The degree table verifies \eqref{eq:cubic}: for $E_6$, $R^3+2R<33$; for $F_4$,
+$\mu\ge32q^3>27q^3+6q$; for $^2E_6$, $\mu\ge28q^6>27q^6+6q^2$; and for $E_7$, $\mu\ge4096q^3>27q^3+6q$. Lemma~\ref{lem:levilift} applies in every case.
+\end{proof}
+
+\begin{lemma}\label{lem:torusnormalizer}
+For even $q\ge4$, Let $T$ be a nonsplit torus of order $q+1$ in $K=\SL_2(q)$, and put $J=N_K(T)$. Then $J$ is dihedral of order $2(q+1)$, the coset degree $M=q(q-1)/2$ is even, and an involution outside $J$ defines a self-paired orbital of degree $\delta=q+1$.
+\end{lemma}
+\begin{proof}
+The quadratic-field norm model gives the torus and its normalizer: a normalizer acts on the algebra $\F_{q^2}$ it generates and is therefore semilinear, with the field involution acting by inversion. The torus is characteristic in $J$, as the set of its odd-order elements, so $J$ is self-normalizing and has $M$ conjugates. Distinct conjugate normalizers share no nonidentity odd-order element: such an element has its unique centralizing nonsplit torus. They also share at most one involution, since two distinct involutions in one of these odd-torus dihedral groups have a nontrivial odd-order product. There are $q^2-1$ involutions in $K$: each has a unique fixed projective point and is a nonidentity element of its root group of order $q$. All involutions are conjugate, since their root parameters are rescaled by squares and squaring is bijective on $\F_q^\times$. Each normalizer has $q+1$ involutions, and double counting shows that each involution belongs to $q/2$ conjugate normalizers. Counting unordered pairs with a common involution gives
+\[
+(q^2-1)\binom{q/2}{2}=\binom{q(q-1)/2}{2}.
+\]
+Thus every two distinct conjugates intersect in exactly a group of order two. There is an involution outside $J$ because $q^2-1>q+1$. Its orbital degree is $|J|/2=q+1$.
+\end{proof}
+\begin{proposition}\label{prop:ranktwo}
+The even-characteristic simple groups $G_2(q),{}^3D_4(q)$ and $^2F_4(q)$, the latter for $q=2^{2e+1}\ge8$, have $\Pp$.
+\end{proposition}
+\begin{proof}
+For $q\ge4$, use the $A_1$ Levi actions from Lemma~\ref{lem:torusnormalizer}; their stabilizers are soluble. The relative Weyl quotients are $G_2/A_1$ in the first two cases and $I_2(8)/A_1$ in the last, so $R_0<q/(q-1)$. Thus
+\[
+R<R_0\frac{q(q-1)}{2(q+1)}<q/2.
+\]
+Each degree-table lower bound exceeds $q^3/8+q$, so Lemma~\ref{lem:levilift} applies. For $G_2(2)'\cong\PSU_3(3)$ use Theorem~\ref{thm:unitaryall}; $G_2(2)$ is its extension of index two. For $^3D_4(2)$ take the $\SL_2(2)$ Levi and its characteristic subgroup $C_3$, of index two, as fiber stabilizer; then $M=2$, $\delta=1$. The standard parabolic orders are $|U_P|=2^{11}$, $|G:P|=2457$, so $R=2\cdot2457/2048<5/2$. Its ordinary minimum degree is $26>(5/2)^3+5$, by \cite[Section 5.4]{Lubeck}. The extra central Levi torus is cyclic, so the full stabilizer is soluble. The Tits group $^2F_4(2)'$ is handled in Section~\ref{sec:sporadic}.
+\end{proof}
+
+\subsection{The type \texorpdfstring{$E_8$}{E8}}
+\begin{proposition}\label{prop:e8}
+The groups $E_8(q)$ have $\Pp$ for all $q$.
+\end{proposition}
+\begin{proof}
+Odd $q$ was covered in Proposition~\ref{prop:oddexceptional}. The standard order and character-degree facts \cite{CarterFinite,Lubeck} are
+\[
+|U|=q^{120},\quad |G|=q^{120}\prod_{i\in\{2,8,12,14,18,20,24,30\}}(q^i-1)<q^{248},
+\]
+\[
+\mu(G)\ge q\Phi_4^2\Phi_8\Phi_{12}\Phi_{20}\Phi_{24}>q^{29}/2.
+\]
+The latter formula holds also for the small parameters $2,3$ in L\"ubeck's ordinary tables. Its coarse estimate uses $\Phi_4\ge q^2$, $\Phi_8\ge q^4$, $\Phi_{12}\ge(3/4)q^4$, $\Phi_{20}\ge(3/4)q^8$, and $\Phi_{24}\ge(15/16)q^8$, whose coefficient product is $135/256>1/2$.
+
+Let $q$ be even. The standard longest representative $g$ is an involution and sends $U$ to $U^-$, with $U\cap U^-=1$; this also follows from the characteristic-two root representatives above. For $q\ge4$ choose any index-two subgroup $H$ of $U$. It is soluble. Lemmas~\ref{lem:orbital} and \ref{lem:multiplicity} give
+\[
+N<2q^{128},\quad d=q^{120}/2,\quad
+\Lambda<\sqrt2\,q^{219/2}.
+\]
+Thus $\Lambda/d<1/2$ and $N\Lambda/d^2<8\sqrt2\,q^{-5/2}\le\sqrt2/4<1/2$. Use \eqref{eq:roughham}, Lemma~\ref{lem:twofront}, and composition.
+
+For $q=2$, take a minimal parabolic with radical of order $2^{119}$ and Levi $\SL_2(2)\cong S_3$. Put $H=U_P\rtimes C_3$, where $C_3$ is its unique subgroup of order three. The longest representative normalizes the Levi and its $C_3$, so $H\cap gHg^{-1}=C_3$. Consequently $d=2^{119}$ and $N=|G|/(3\cdot2^{119})<2^{129}/3$, an even integer. Since $\mu(G)>2^{28}$,
+\[
+\Lambda^2\le |G|/(3\mu(G))<\tfrac43\,2^{218},\quad
+\Lambda<\tfrac32\,2^{109},\quad N\Lambda<2^{237}=d^2/2.
+\]
+Also $\Lambda<d/2$. The same argument proves the result.
+\end{proof}
+
+\subsection{Suzuki groups and a split Euler graph}
+The standard Suzuki ovoid action of $G=\Sz(q)$, $q=2^{2e+1}\ge8$, has degree $q^2+1$ and is doubly transitive. For a point $v$, let $Z_v$ be the center of its root group. These subgroups are conjugation-covariant and act semiregularly on the other points with orbit size $q$. We recall the structure input \cite[Section 2.2 and Table 1]{Leemans}: a point stabilizer is $U\rtimes\F_q^\times$, with
+\[
+u(a,b)u(c,d)=u(a+c,b+d+ac^\theta),\qquad
+\theta=2^{e+1},\qquad Z(U)=\{u(0,b)\}.
+\]
+The two-point stabilizer scales $b$ by $t^{\theta+1}$. Since $\gcd(\theta+1,q-1)=1$, it is transitive on $Z_vw\setminus\{w\}$. The setwise stabilizer of two points is a maximal dihedral subgroup of order $2(q-1)$; in particular the unordered-pair action is primitive. These last assertions are the Suzuki subgroup data used here.
+
+Construct a graph $J$ whose vertices are pairs $(v,C)$, with $C$ a $Z_v$-orbit outside $v$. The unordered pair $\{v,w\}$ is the edge from $(v,Z_vw)$ to $(w,Z_wv)$. This is a simple $q$-regular graph. Its line graph has unordered pairs as vertices. It is a nonempty invariant graph in the primitive unordered-pair action, so is connected; hence $J$, which has no isolated vertices, is connected. As $q$ is even, $J$ has an Euler tour, giving a Hamilton cycle in its line graph.
+
+The line graph is $G$-arc-transitive. Indeed its arcs are $\{v,w\},\{v,z\}$ with $z\in Z_vw\setminus\{w\}$. Double transitivity first matches $(v,w)$, and the two-point stabilizer then matches $z$. Its vertex number $\binom{q^2+1}{2}$ is even and its vertex stabilizer is the soluble dihedral group above. Lemma~\ref{lem:twofront} and composition prove $\Pp(\Sz(q))$. To justify the gcd used above, a common divisor divides both $2^{2e+2}-1$ and $2^{2e+1}-1$, hence is one. The nonsimple group $\Sz(2)$ is soluble.
+
+This completes the exceptional families at every simple parameter, apart from the explicitly separated Tits group. The choice of a different even action in each case is substantive: the natural flag degrees in characteristic two are odd, so the odd-characteristic opposition argument alone would not have sufficed.
+
+\section{Sporadic groups and the Tits group}\label{sec:sporadic}
+For a transitive action, a \emph{suborbit} is an orbit of a point stabilizer, and an \emph{orbital} is an orbit on ordered pairs. A non-diagonal orbital and its reversal have the same subdegree, since both contain $Nd$ ordered pairs when the degree is $N$ and subdegree is $d$.
+\begin{lemma}\label{lem:uniqueorbital}
+Suppose $G$ acts transitively on an even set of size $N$, its point stabilizer $H$ has $\Pp$, and a non-diagonal subdegree $d\ge3$ occurs exactly once. Assume the action is primitive, or that $G$ is nonabelian simple and $3d>N$. If one of
+\[
+2d\ge N,\qquad 3d\ge N,\qquad 2N\le7d-14
+\]
+holds, then $\Pp(G)$.
+\end{lemma}
+\begin{proof}
+Uniqueness makes this orbital self-paired, hence a simple arc-transitive $d$-regular graph. In a primitive action its components would be nontrivial blocks, so it is connected. Under the alternative hypothesis, each component has at least $d+1$ vertices and there could be at most two; two components would give a nontrivial homomorphism of the simple group onto $S_2$. It is therefore connected here too. Watkins's bound gives connectivity at least three. The three displayed inequalities allow respectively Dirac, Jackson, and the theorem of \cite{BHVJ}, whose connectivity-two exceptions are excluded. Finish with Lemma~\ref{lem:twofront} and composition.
+\end{proof}
+In an even-degree rank-three action, both non-diagonal orbitals are self-paired: otherwise they would be reverses of equal subdegree, whose sum $N-1$ is odd. The larger has degree at least $N/2$, so such an action also gives $\Pp(G)$ whenever its stabilizer has $\Pp$.
+
+\subsection{Mathieu groups}
+We use their standard permutation representations and stabilizers from \cite{Atlas,AtlasRep,Cuypers}. The degree-twelve action of $M_{11}$ is doubly transitive, with stabilizer $\PSL_2(11)$; hence $M_{11}$ has $\Pp$. The degree-$22$ action of $M_{22}$ has stabilizer $M_{21}\cong\PSL_3(4)$ and is triply transitive, so $M_{22}$ has $\Pp$. The degree-twelve action of $M_{12}$ has stabilizer $M_{11}$ and is doubly transitive, giving $\Pp(M_{12})$.
+For $M_{23}$ use its four-transitive action on $23$ points. On ordered distinct pairs join $(a,b)$ to $(c,d)$ when the four entries are all distinct. This is arc-transitive, has even order $N=23\cdot22=506$, degree $d=21\cdot20=420>N/2$, and stabilizer $\PSL_3(4)$. Thus $M_{23}$ has $\Pp$. Finally the doubly transitive degree-$24$ action of $M_{24}$ has stabilizer $M_{23}$. This proves the assertion for all five Mathieu groups without a circular stabilizer dependency.
+
+\subsection{The remaining published actions}
+The permutation data in the next table are external inputs from \cite{Atlas,AtlasRep,PraegerSoicher,Muller,Mfer}. Precisely, each row specifies an actual transitive action, its stabilizer $H$, its degree $N$, and a non-diagonal subdegree $d$ occurring exactly once. All these actions are primitive except the indicated $J_4$ action. The first seven rows have rank three; their other nontrivial subdegrees are respectively $36,22,416,891,693,28431,31671$. Record identifiers and the longer subdegree lists are provided in Appendix~\ref{app:data}, so uniqueness and all numerical comparisons can be checked directly.
+We write $L_n(q)=\PSL_n(q)$ in the table, a dot for a specified central extension, and a colon for a semidirect extension, following ATLAS notation. For the $Fi_{23}$ stabilizer, the orthogonal simple group is written projectively to fix its meaning.
+
+\begingroup\small
+\begin{longtable}{@{}llllc@{}}
+\caption{Actions used for the sporadic and Tits groups.}\label{tab:sporadic}\\
+\toprule
+$G$ & $H$ & $N$ & $d$ & criterion\\
+\midrule\endfirsthead
+\toprule $G$ & $H$ & $N$ & $d$ & criterion\\\midrule\endhead
+$J_2$ & $\PSU_3(3)$ & $100$ & $63$ & D\\
+$HS$ & $M_{22}$ & $100$ & $77$ & D\\
+$Suz$ & $G_2(4)$ & $1782$ & $1365$ & D\\
+$Co_2$ & $\PSU_6(2):2$ & $2300$ & $1408$ & D\\
+$Fi_{22}$ & $2.\PSU_6(2)$ & $3510$ & $2816$ & D\\
+$Fi_{23}$ & $\mathrm P\Omega_8^+(3):S_3$ & $137632$ & $109200$ & D\\
+$Fi_{24}'$ & $Fi_{23}$ & $306936$ & $275264$ & D\\
+$T={}^2F_4(2)'$ & $L_3(3):2$ & $1600$ & $936$ & D\\
+$Ru$ & $T:2$ & $4060$ & $2304$ & D\\
+$J_1$ & $L_2(11)$ & $266$ & $132$ & J\\
+$J_3$ & $L_2(16):2$ & $6156$ & $2040$ & B\\
+$McL$ & $3^{1+4}:(2.S_5)$ & $15400$ & $11664$ & D\\
+$Co_1$ & $Co_2$ & $98280$ & $47104$ & J\\
+$Co_3$ & $HS$ & $11178$ & $5600$ & D\\
+$He$ & $\Sp_4(4):2$ & $2058$ & $1360$ & D\\
+$HN$ & $A_{12}$ & $1140000$ & $362880$ & B\\
+$O'N$ & $L_3(7):2$ & $122760$ & $58653$ & J\\
+$Ly$ & $G_2(5)$ & $8835156$ & $5812500$ & D\\
+$J_4$ & $2^{11}:M_{23}$ & $4153617336$ & $1899233280$ & J$^*$\\
+$Th$ & ${}^3D_4(2):3$ & $143127000$ & $105670656$ & D\\
+$B$ & $2.{}^2E_6(2):2$ & $13571955000$ & $11174042880$ & D\\
+$M$ & $2.B$ & $97239461142009186000$ & $64353605265653760000$ & D\\
+\bottomrule
+\end{longtable}
+\endgroup
+Here D means $2d\ge N$, J means $3d\ge N$, and B means $2N\le7d-14$. In the starred nonprimitive action, $3d>N$, so the alternative connectedness proof in Lemma~\ref{lem:uniqueorbital} is essential. For the two B rows the comparisons are $12312<14266$ and $2280000<2540146$.
+
+All stabilizer claims $\Pp(H)$ now have noncircular proofs. The classical and exceptional groups in the table are covered in Sections~\ref{sec:linear}--\ref{sec:exceptional}; their central extensions and soluble outer factors are covered by Corollary~\ref{cor:extension}. In particular the $Fi_{23}$ orthogonal factor and its $S_3$ quotient cause no further case. The $HS,Co_2,Fi_{23}$ rows precede their uses as stabilizers. The Mathieu groups and $A_{12}$ are already solved. For $McL$, the normal $3$-group has quotient $2.S_5$, which has $\Pp$ by the central extension of the already solved $S_5$. First prove the Tits row; its index-two extension $^2F_4(2)=T:2$ then handles $Ru$. Finally prove $B$ before $M$, whose stabilizer is its central double cover. Thus every row meets Lemma~\ref{lem:uniqueorbital} or its rank-three consequence.
+\begin{theorem}\label{thm:sporadic}
+All twenty-six sporadic simple groups and the Tits group have $\Pp$.
+\end{theorem}
+\begin{proof}
+The Mathieu argument covers five groups. The table covers the other twenty-one and the Tits group with the stabilizers and Hamiltonicity just verified.
+\end{proof}
+
+\section{The exact finite witness for \texorpdfstring{$\Gamma_8$}{Gamma(8)}}\label{sec:certificate}
+This section is the sole computer-assisted step. Its executable certificate is
+\begin{center}\texttt{Palindromic\_Walks\_PSU3\_8\_Certificate.py}.\end{center}
+It uses only the Python standard library and fixed data, with no search or random input.
+Let $E=\F_2[T]/(T^{18}+T^7+1)$ and let $\gamma$ be the class of $T$. The certificate verifies that the polynomial is irreducible and that $\gamma$ has order $2^{18}-1=3^3\cdot7\cdot19\cdot73$. Put $q=8$, $L=57$, $R=73$, and $M=LR=4161$. Projective points over $\F_{64}$ have the unique labels $[\gamma^a]$, $0\le a<M$. Representatives of the $K=\langle[\gamma^{73}]\rangle$-orbits have $0\le a<73$.
+
+The following rows list the $64$ orbit representatives in cyclic order and the $64$ shifts on their outgoing edges, in the same order:
+\begin{quote}\small\ttfamily
+\begin{tabular}{@{}l@{}}
+0,23,67,25,38,54,12,36,34,45,61,9,15,70,53,66,\\
+10,56,44,41,55,64,2,4,57,6,40,19,30,8,68,71,\\
+35,24,42,21,14,32,3,65,27,11,22,46,39,28,5,33,\\
+17,49,18,20,50,72,47,1,48,59,7,69,37,16,60,63;\\[1mm]
+23,30,22,40,1,11,13,8,26,21,4,14,18,2,16,24,\\
+3,6,43,20,2,24,23,40,44,4,38,4,33,31,26,10,\\
+16,19,35,25,5,5,6,36,5,32,10,29,17,27,37,25,\\
+11,4,3,6,14,54,24,16,30,2,38,37,23,32,6,2.
+\end{tabular}
+\end{quote}
+Denote the two lists by $(a_i)$ and $(b_i)$, $0\le i<64$, with $a_{64}=a_0$. The precise certified assertions are
+\begin{align}
+\{a_i:0\le i<64\}
+&=\{a\in\{0,\ldots,72\}:\Tr_{E/\F_{64}}(\gamma^{513a})\ne0\},\label{eq:certreps}\\
+\Tr_{E/\F_{64}}(\gamma^{a_i+512(a_{i+1}+73b_i)})&=0\quad(0\le i<64),\label{eq:certedges}\\
+\sum_i b_i&\equiv1\pmod{57}.\label{eq:certtotal}
+\end{align}
+Equation~\eqref{eq:certreps} verifies the exhaustive nonisotropic orbit representatives, \eqref{eq:certedges} verifies every base edge, and \eqref{eq:certtotal} gives generating total voltage. The lifting argument in Section~\ref{sec:unitarythree} proves that these finite assertions suffice. The certificate additionally enumerates all $3648$ lifted vertices, compares them with all nonisotropic projective labels, and directly verifies all $3648$ edges, including the closing edge.
+
+\paragraph{Verification pseudocode.}
+The arithmetic uses integers whose bits are polynomial coefficients; addition is exclusive-or and multiplication is reduction modulo $f=T^{18}+T^7+1$.
+\begin{enumerate}
+\item Check $T^{2^{18}}=T\pmod f$ and $\gcd(f,T^{2^9}-T)=\gcd(f,T^{2^6}-T)=1$. Check the four primes dividing $2^{18}-1$ and $\gamma^{(2^{18}-1)/p}\ne1$ for each, as well as $\gamma^{2^{18}-1}=1$.
+\item Build the exact power table $e_j=\gamma^j$, $0\le j<2^{18}-1$. Evaluate the trace of $\gamma^z$ as $e_z+e_{64z}+e_{4096z}$, with exponents reduced modulo $2^{18}-1$.
+\item For $0\le a<4161$, mark whether the trace at $513a$ is nonzero. Check that exactly $3648$ labels are marked and that the marked orbit representatives $0\le a<73$ are exactly the fixed first list.
+\item Check \eqref{eq:certedges} for the $64$ list pairs and \eqref{eq:certtotal}. Generate the lifted labels $(a_i+73s)\bmod4161$, updating the cumulative shift by $b_i$ on each step and repeating the list $57$ times.
+\item Check that each marked label appears once, no unmarked label appears, and each successive pair, including the last and first, has trace zero under $h$. Return PASS only if every check succeeds.
+\end{enumerate}
+For irreducibility in the first step, the irreducible factors of $T^{2^{18}}-T$ have degrees dividing $18$. Every proper divisor of $18$ divides $9$ or $6$, so the two gcd checks exclude them all; a degree-$18$ divisor must therefore be irreducible. The multiplicative-order checks then certify primitivity. Thus the arithmetic model is certified, rather than assumed from a table of primitive polynomials.
+
+The functions \texttt{audit\_field}, \texttt{exponential\_table}, and \texttt{trace\_power} implement the arithmetic steps; \texttt{main} checks the lists and the complete lift. The supplied file has been executed successfully under Python~3. Its output is
+\begin{quote}\small\ttfamily
+PASS: irreducible field polynomial and primitive element of order 262143\\
+PASS: the 64 listed representatives are exactly the nonisotropic K-orbits\\
+PASS: all 64 base edges are orthogonal; total voltage is 1 modulo 57\\
+PASS: all 3648 vertices and all 3648 edges of the closed lift audited
+\end{quote}
+\begin{proposition}\label{prop:q8}
+The graph $\Gamma_8$ has a Hamilton cycle, and $\PSU_3(8)$ has $\Pp$.
+\end{proposition}
+\begin{proof}
+The certified assertions and the cyclic lift give the Hamilton cycle. Its point stabilizer is the solved scalar quotient of $\U_2(8)$, and the graph has even order and is arc-transitive. Use Lemma~\ref{lem:twofront} and composition.
+\end{proof}
+
+\section{Assembly of the finite-group theorem}\label{sec:assembly}
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+By the classification of finite simple groups \cite{GLS}, a finite simple group is cyclic of prime order, alternating, of Lie type, or one of the twenty-six sporadic groups. Cyclic groups are covered by Lemma~\ref{lem:abelian}; alternating groups by Proposition~\ref{prop:alternating}. The classical families are covered by Theorems~\ref{thm:sl}, \ref{thm:sp}, \ref{thm:orthodd}, \ref{thm:ortheven}, and \ref{thm:unitaryall}. The exceptional families are covered by Section~\ref{sec:exceptional}, and the sporadic and Tits groups by Theorem~\ref{thm:sporadic}. The small derived exceptions $\Sp_4(2)'\cong A_6$, $G_2(2)'\cong\PSU_3(3)$, and $^2G_2(3)'\cong\PSL_2(8)$ are already among the covered groups; the other nonsimple low parameters contribute no new simple family. Thus all finite simple groups have $\Pp$. Apply Corollary~\ref{cor:extension} along a composition series of an arbitrary finite group.
+\end{proof}
+
+The constructive content is preserved by this assembly. At each stage the stabilizer word is repeated in every coset, with its endpoint removed from the next transition by a single corrected letter. The two-front procedure supplies the outer palindrome from a Hamilton ordering. No fixed-point-free global reflection of the group is assumed. In the unitary cyclic cover, Hamiltonicity and generating voltage are separate tasks; the difference-label bijection and the small-subgroup/large-subgroup distinction are what join them. The classification organizes these constructions into an existence proof; we do not claim that this organization gives a polynomial-time algorithm in a compact presentation of the input group.
+
+\appendix
+\section{Permutation-data records and subdegrees}\label{app:data}
+This appendix specifies the external data used in Table~\ref{tab:sporadic}. An ATLAS identifier below is appended to
+\begin{center}\url{https://brauer.maths.qmul.ac.uk/Atlas/v3/permrep/}\end{center}
+to locate the action record, including its primitivity and suborbit information; stabilizer structures are also recorded in the printed ATLAS and the group pages. The first five records specify the Mathieu actions used above.
+\begin{center}\small
+\begin{longtable}{ll}
+\toprule Group & ATLAS record\\\midrule\endfirsthead
+\toprule Group & ATLAS record\\\midrule\endhead
+$M_{11}$ & \texttt{M11G1-p12B0}\\
+$M_{12}$ & \texttt{M12G1-p12B0}\\
+$M_{22}$ & \texttt{M22G1-p22B0}\\
+$M_{23}$ & \texttt{M23G1-p23B0}\\
+$M_{24}$ & \texttt{M24G1-p24B0}\\
+$J_2$ & \texttt{J2G1-p100B0}\\
+$HS$ & \texttt{HSG1-p100B0}\\
+$Suz$ & \texttt{SuzG1-p1782B0}\\
+$Co_2$ & \texttt{Co2G1-p2300B0}\\
+$Fi_{22}$ & \texttt{F22G1-p3510B0}\\
+$Fi_{23}$ & \texttt{F23G1-p137632B0}\\
+$Fi_{24}'$ & \texttt{F24G1-p306936B0}\\
+$T$ & \texttt{TF42G1-p1600B0}\\
+$Ru$ & \texttt{RuG1-p4060B0}\\
+$J_1$ & \texttt{J1G1-p266B0}\\
+$J_3$ & \texttt{J3G1-p6156B0}\\
+$McL$ & \texttt{McLG1-p15400aB0}\\
+$Co_1$ & \texttt{Co1G1-p98280B0}\\
+$Co_3$ & \texttt{Co3G1-p11178B0}\\
+$He$ & \texttt{HeG1-p2058B0}\\
+$HN$ & \texttt{HNG1-p1140000B0}\\
+$O'N$ & \texttt{ONG1-p122760aB0}\\
+\bottomrule
+\end{longtable}
+\end{center}
+For the remaining five actions, the precise mfer PDF records are
+\begin{align*}
+Ly &: \texttt{data/Ly/Ly\_1.pdf}, & J_4 &: \texttt{data/J4/J4\_2.pdf},\\
+Th &: \texttt{data/Th/Th\_1.pdf}, & B &: \texttt{data/B/B\_1.pdf},\\
+M &: \texttt{data/M/M\_1.pdf},
+\end{align*}
+relative to \url{https://www.math.rwth-aachen.de/homes/mfer/}. In these eigenmatrices, the row labelled $1a$ is the row of subdegrees; other character rows are not subdegree lists. The $J_4$ action on the cosets of $2^{11}:M_{23}$ is expressly listed as nonprimitive, being subordinate to the $2^{11}:M_{24}$ action.
+
+For completeness the following are the full subdegree lists, including the trivial suborbit, for the last fifteen cases in the table, used with the unique-length criterion. In each list the $d$ chosen in Table~\ref{tab:sporadic} appears once, and the sum is the displayed $N$. These finite integer comparisons are not additional group-structure assumptions or computational proof steps.
+\paragraph{$T$.} (1, 312, 351, 936).
+\paragraph{$Ru$.} (1, 1755, 2304).
+\paragraph{$J_1$.} (1, 11, 12, 110, 132).
+\paragraph{$J_3$.} (1, 85, 120, 510, 680, 1360, 1360, 2040).
+\paragraph{$McL$.} (1, 90, 1215, 2430, 11664).
+\paragraph{$Co_1$.} (1, 4600, 46575, 47104).
+\paragraph{$Co_3$.} (1, 352, 1100, 4125, 5600).
+\paragraph{$He$.} (1, 136, 136, 425, 1360).
+\paragraph{$HN$.} (1, 462, 2520, 2520, 10395, 16632, 30800, 69300, 166320, 166320, 311850, 362880).
+\paragraph{$O'N$.} (1, 5586, 6384, 52136, 58653).
+\paragraph{$Ly$.} (1, 19530, 968750, 2034375, 5812500).
+\paragraph{$J_4$.} (1, 23, 121440, 242880, 680064, 81607680, 82575360, 130572288, 652861440, 1305722880, 1899233280).
+\paragraph{$Th$.} (1, 17199, 45864, 179712, 1304576, 2201472, 5031936, 8128512, 8805888, 11741184, 105670656).
+\paragraph{$B$.} (1, 3968055, 23113728, 2370830336, 11174042880).
+\paragraph{$M$.}
+\[
+\begin{aligned}
+&(1,27143910000,11707448673375,2031941058560000,\\
+&\quad91569524834304000,1102935324621312000,1254793905192960000,\\
+&\quad30434513446055706624,64353605265653760000).
+\end{aligned}
+\]
+
+
+\begin{thebibliography}{99}
+\raggedright
+\bibitem{Kagey125} P. Kagey, Problem 125, in \emph{Open problem collection}, online problem page, \url{https://peterkagey.com/problems/125/}, accessed October 2026.
+\bibitem{KageyMSE} P. Kagey, Does every group have a Hamiltonian walk whose reversal is Hamiltonian?, Mathematics Stack Exchange, question 3706654, 5 June 2020, \url{https://math.stackexchange.com/q/3706654}.
+\bibitem{GLS} D. Gorenstein, R. Lyons and R. Solomon, \emph{The Classification of the Finite Simple Groups}, Mathematical Surveys and Monographs 40, American Mathematical Society, Providence, RI, series beginning in 1994.
+\bibitem{Taylor} D. E. Taylor, \emph{The Geometry of the Classical Groups}, Sigma Series in Pure Mathematics 9, Heldermann Verlag, Berlin, 1992. Author's electronic edition: \url{https://mail.maths.usyd.edu.au/u/don/papers/gcg.pdf}.
+\bibitem{Cameron} P. J. Cameron, \emph{Notes on Classical Groups}, Queen Mary and Westfield College, lecture notes, 2000, \url{https://webspace.maths.qmul.ac.uk/p.j.cameron/class_gps/cg.pdf}.
+\bibitem{CarterSimple} R. W. Carter, \emph{Simple Groups of Lie Type}, Wiley, London, 1972.
+\bibitem{CarterFinite} R. W. Carter, \emph{Finite Groups of Lie Type: Conjugacy Classes and Complex Characters}, Wiley, Chichester, 1985.
+\bibitem{Humphreys} J. E. Humphreys, \emph{Reflection Groups and Coxeter Groups}, Cambridge Studies in Advanced Mathematics 29, Cambridge University Press, Cambridge, 1990.
+\bibitem{Garonzi} M. Garonzi, D. Levy, A. Mar\'oti and I. I. Simion, Factorizations of finite groups by conjugate subgroups which are solvable or nilpotent, arXiv:1501.05678, 2015, \url{https://arxiv.org/abs/1501.05678}.
+\bibitem{Lubeck} F. L\"ubeck, Smallest degrees of representations of exceptional groups of Lie type, \emph{Comm. Algebra} \textbf{29} (2001), 2147--2169. \url{https://www.math.rwth-aachen.de/~Frank.Luebeck/preprints/smdegexc.pdf}.
+\bibitem{Leemans} D. Leemans, The rank 2 geometries of the simple Suzuki groups $\Sz(q)$, \emph{Beitr. Algebra Geom.} \textbf{39} (1998), 97--120. \url{https://emis.de/ft/11479}.
+\bibitem{Dirac} G. A. Dirac, Some theorems on abstract graphs, \emph{Proc. London Math. Soc.} (3) \textbf{2} (1952), 69--81.
+\bibitem{CE} V. Chv\'atal and P. Erd\H{o}s, A note on Hamiltonian circuits, \emph{Discrete Math.} \textbf{2} (1972), 111--113. \url{https://www.renyi.hu/~p_erdos/1972-02.pdf}.
+\bibitem{Jackson} B. Jackson, Hamilton cycles in regular 2-connected graphs, \emph{J. Combin. Theory Ser. B} \textbf{29} (1980), 27--46.
+\bibitem{Watkins} M. E. Watkins, Connectivity of transitive graphs, \emph{J. Combin. Theory} \textbf{8} (1970), 23--29.
+\bibitem{BHVJ} H. J. Broersma, J. van den Heuvel, B. Jackson and H. J. Veldman, Hamiltonicity of regular 2-connected graphs, \emph{J. Graph Theory} \textbf{22} (1996), 105--124.
+\bibitem{BrouwerHaemers} A. E. Brouwer and W. H. Haemers, \emph{Spectra of Graphs}, Universitext, Springer, New York, 2012.
+\bibitem{Kotzig} A. Kotzig, Moves without forbidden transitions in a graph, \emph{Mat. \v{C}asopis} \textbf{18} (1968), 76--80. \url{https://www.dml.cz/handle/10338.dmlcz/136066}.
+\bibitem{Kneser} M. Kneser, Absch\"atzung der asymptotischen Dichte von Summenmengen, \emph{Math. Z.} \textbf{58} (1953), 459--484.
+\bibitem{GrossTucker} J. L. Gross and T. W. Tucker, \emph{Topological Graph Theory}, Wiley, New York, 1987.
+\bibitem{PW} K. I. Piterman and V. Welker, Homotopy properties of the complex of frames of a unitary space, arXiv:2208.12626, 2022, revised 2023, \url{https://arxiv.org/abs/2208.12626}.
+\bibitem{Kestenband} B. C. Kestenband, A family of complete arcs in finite projective planes, \emph{Colloq. Math.} \textbf{57} (1989), 59--67.
+\bibitem{StormeVM} L. Storme and H. Van Maldeghem, Cyclic arcs in $\PG(2,q)$, \emph{J. Algebraic Combin.} \textbf{3} (1994), 113--128.
+\bibitem{Atlas} J. H. Conway, R. T. Curtis, S. P. Norton, R. A. Parker and R. A. Wilson, \emph{Atlas of Finite Groups}, Clarendon Press, Oxford, 1985.
+\bibitem{AtlasRep} R. A. Wilson and collaborators, \emph{ATLAS of Finite Group Representations}, online representation and subgroup records, \url{https://brauer.maths.qmul.ac.uk/Atlas/v3/}, accessed October 2026. Individual permutation-record identifiers are given in Appendix~\ref{app:data}.
+\bibitem{Cuypers} H. Cuypers, \emph{The Mathieu groups and designs}, Eindhoven University of Technology, lecture notes, \url{https://hansc.win.tue.nl/eidmamathieu.pdf}.
+\bibitem{PraegerSoicher} C. E. Praeger and L. H. Soicher, \emph{Low Rank Representations and Graphs for Sporadic Groups}, Australian Mathematical Society Lecture Series 8, Cambridge University Press, Cambridge, 1997.
+\bibitem{Muller} J. M\"uller, \emph{On Endomorphism Rings and Character Tables}, Habilitationsschrift, RWTH Aachen, 2003, \url{https://www.math.rwth-aachen.de/~Juergen.Mueller/preprints/jm19.pdf}.
+\bibitem{Mfer} T. Breuer, I. H\"ohler and J. M\"uller, \emph{mfer: endomorphism rings of multiplicity-free permutation modules}, online data associated with the GAP package, \url{https://www.math.rwth-aachen.de/~mfer/}, accessed October 2026. Individual data files are identified in Appendix~\ref{app:data}.
+\end{thebibliography}
+\end{document}
